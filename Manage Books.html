@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Books</title>
+</head>
+
+<body>
+
+<h2><center>Manage Books</center></h2>
+
+<table width="100%" border="2" bgcolor="lightblue">
+<tr>
+<td><center><a href="index.html">Home</a></center></td>
+<td><center><a href="#">Add Book</a></center></td>
+<td><center><a href="manage-books.html">Edit Book</a></center></td>
+<td><center><a href="login.html">Logout</a></center></td>
+</tr>
+</table>
+
+<br>
+
+<h3>Books List</h3>
+
+<table border="1" width="100%" bgcolor="lightgray">
+
+<tr>
+<th>ID</th>
+<th>Book Name</th>
+<th>Author</th>
+<th>Category</th>
+<th>Edit</th>
+<th>Delete</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Clean Code</td>
+<td>Robert Martin</td>
+<td>Programming</td>
+
+<td>
+<a href="#">
+<button>Edit</button>
+</a>
+</td>
+
+<td>
+<button onclick="deleteBook(this)">Delete</button>
+</td>
+</tr>
+
+
+<tr>
+<td>2</td>
+<td>Atomic Habits</td>
+<td>James Clear</td>
+<td>Self Development</td>
+
+<td>
+<a href="#">
+<button>Edit</button>
+</a>
+</td>
+
+<td>
+<button onclick="deleteBook(this)">Delete</button>
+</td>
+</tr>
+
+
+<tr>
+<td>3</td>
+<td>Harry Potter</td>
+<td>J.K Rowling</td>
+<td>Fantasy</td>
+
+<td>
+<a href="#">
+<button>Edit</button>
+</a>
+</td>
+
+<td>
+<button onclick="deleteBook(this)">Delete</button>
+</td>
+</tr>
+
+</table>
+
+
+<script>
+
+function deleteBook(button){
+
+    var row = button.parentNode.parentNode;
+    row.remove();
+
+}
+
+</script>
+
+</body>
+</html>
