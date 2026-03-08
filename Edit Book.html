@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Book</title>
+</head>
+<body>
+
+    <h2>Edit Book Details</h2>
+
+    <form action="Manage Books.html">
+        <label>ID:</label><br>
+        <input type="text" name="ID" value="" readonly><br>
+        <small>(ID cannot be changed)</small><br><br>
+
+        <label>Book Name:</label><br>
+        <input type="text" name="bookName" value=""><br><br>
+
+        <label>Author:</label><br>
+        <input type="text" name="author" value=""><br><br>
+
+        <label for="category">Category:</label><br>
+        <input type="text" id="category" name="category" value=""><br><br>
+
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" value="" rows="4" cols="40"></textarea><br><br>
+
+        <button type="submit">Save Changes</button>
+        <a href="Manage Books.html">Cancel</a>
+    </form> 
+
+</body>
+</html>
