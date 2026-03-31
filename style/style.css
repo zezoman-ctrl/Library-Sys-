@@ -5,7 +5,6 @@
     font-family:Arial, Helvetica, sans-serif;
 }
 
-/* BODY مع Flex column */
 body{
     min-height:100vh;
     display: flex;
@@ -14,12 +13,11 @@ body{
     color:white;
 }
 
-/* MAIN المحتوى الرئيسي */
+
 main{
-    flex: 1; /* يشغل كل المساحة المتاحة */
+    flex: 1;
 }
 
-/* STARS */
 .stars span{
     position:absolute;
     background:white;
@@ -32,7 +30,6 @@ main{
     to{ transform: translateY(-1000px); opacity:0; }
 }
 
-/* NAV */
 nav{
     display:flex;
     justify-content:center;
@@ -69,7 +66,6 @@ nav a:hover::after{
     width:100%;
 }
 
-/* HERO */
 .container{
     text-align:center;
     margin-top:60px;
@@ -90,7 +86,6 @@ p{
     to{opacity:1; transform:translateY(0);} 
 }
 
-/* SEARCH BAR */
 .search-bar{
     margin:40px auto 70px;
     text-align:center;
@@ -148,7 +143,6 @@ p{
     background: rgba(255,255,255,0.1);
 }
 
-/* FEATURES */
 .features{
     display:flex;
     justify-content:center;
@@ -183,7 +177,6 @@ p{
     box-shadow:0 20px 40px rgba(70, 70, 70, 0.3);
 }
 
-/* LOADER */
 .loader{
     position:fixed;
     top:0;
@@ -195,7 +188,7 @@ p{
     align-items:center;
     justify-content:center;
     z-index:1000;
-    animation: hideLoader 2s forwards 2s;
+    animation: hideLoader 500ms forwards 500ms;
 }
 
 .loader div{
@@ -204,7 +197,7 @@ p{
     border:5px solid #f9fbfb;
     border-top:5px solid transparent;
     border-radius:50%;
-    animation: spin 1s linear infinite;
+    animation: spin 500ms linear infinite;
 }
 
 @keyframes spin{
@@ -215,7 +208,6 @@ p{
     to{opacity:0; visibility:hidden;} 
 }
 
-/* FOOTER */
 footer{
     text-align:center;
     padding:10px;
