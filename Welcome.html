@@ -1,35 +1,59 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Library System</title>
-        <meta name="description" content="Welcome! in Our website">
-    </head>
-    <body>
-        <h2><center>Welcome to the online library</center></h2>
-        <table width="100%" border="2" bgcolor="lightblue">
-            <tr>
-                <td><center><a href="Welcome.html">Home</a></center></td>
-                <td><center><a href="book.html">Book</a></center></td>
-                <td><center><a href="books_pages.html">Book Details</a></center></td>
-                <td><center><a href="borrowed.html">Borrowed</a></center></td>
-                <td><center><a href="login.html">Log in</a></center></td>
-                <td><center><a href="Manage Books.html">Manage Books</a></center></td>
-            </tr>
-        </table>
-        <p>
-            <b>
-            This library is for users who want to borrow books
-            from websites and see what books are available.
-            </b>
-        </p>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StarLibrary</title>
+<link rel="stylesheet" href="Style/style.css">
+</head>
 
-        <br><br><br><br><br><br><br><br><br><br><br><br>
-        <br><br><br><br><br><br><br><br><br><br><br><br>
+<body>
 
-        <table width="100%" border="1" bgcolor="lightgray">
-            <tr>
-                <td><center><p>©2026 Our Website</p></center></td>
-            </tr>
-        </table>
-    </body>
+<div class="loader"><div></div></div>
+<div class="stars" id="stars"></div>
+
+<nav>
+    <a href="Welcome.html">Home</a>
+    <a href="book.html">Books</a>
+    <a href="books_pages.html">Book Details</a>
+    <a href="login.html">Log in</a>
+    <a href="signup.html">Sign up</a>
+</nav>
+
+<main>
+    <div class="container">
+        <h1>Star Library</h1>
+        <p>Experience the future of reading</p>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search for books, authors, or topics...">
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <h3>Huge Collection</h3>
+            <p>Thousands of books from all genres available online.</p>
+        </div>
+        <div class="feature">
+            <h3>Fast Access</h3>
+            <p>Instantly find and read your favorite books with no wait.</p>
+        </div>
+        <div class="feature">
+            <h3>Anywhere</h3>
+            <p>Read on any device, anytime, anywhere in the world.</p>
+        </div>
+        <div class="feature">
+            <h3>Secure</h3>
+            <p>Your account and reading history are fully protected.</p>
+        </div>
+    </div>
+</main>
+
+<footer>© 2026 StarLibrary | All rights reserved</footer>
+
+<script src="Javascript/navbar.js"></script>
+<script src="Javascript/search.js"></script>
+<script src="Javascript/star.js"></script>
+</body>
 </html>
