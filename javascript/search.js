@@ -17,13 +17,17 @@ searchInput.addEventListener('input', () => {
     searchResults.innerHTML = '';
 
     if(query.length > 0){
-        const filtered = books.filter(book => book.toLowerCase().includes(query));
+        const filtered = books.filter(book => 
+            book.toLowerCase().startsWith(query)
+        );
+
         filtered.forEach(book => {
             const div = document.createElement('div');
             div.textContent = book;
             div.classList.add('search-item');
             searchResults.appendChild(div);
         });
+
         searchResults.classList.add('show');
     } else {
         searchResults.classList.remove('show');
