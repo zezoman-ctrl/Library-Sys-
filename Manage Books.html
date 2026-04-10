@@ -1,104 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Manage Books</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Books - StarLibrary</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/manage-books.css">
 </head>
-
 <body>
+    <div class="stars" id="stars"></div>
 
-<h2><center>Manage Books</center></h2>
+    <nav>
+        <a href="Welcome.html">Home</a>
+        <a href="Add Book.html">Add Book</a>
+        <a href="login.html">Logout</a>
+    </nav>
 
-<table width="100%" border="2" bgcolor="lightblue">
-<tr>
-<td><center><a href="Welcome.html">Home</a></center></td>
-<td><center><a href="Add Book.html">Add Book</a></center></td>
-<td><center><a href="manage-books.html">Edit Book</a></center></td>
-<td><center><a href="login.html">Logout</a></center></td>
-</tr>
-</table>
+    <main>
+        <h2 class="page-title">MANAGE BOOKS</h2>
+        <p class="books-count" id="booksCount"></p>
+        <div class="books-grid" id="booksGrid"></div>
+    </main>
 
-<br>
-
-<h3>Books List</h3>
-
-<table border="1" width="100%" bgcolor="lightgray">
-
-<tr>
-<th>ID</th>
-<th>Book Name</th>
-<th>Author</th>
-<th>Category</th>
-<th>Edit</th>
-<th>Delete</th>
-</tr>
-
-<tr>
-<td>1</td>
-<td>Clean Code</td>
-<td>Robert Martin</td>
-<td>Programming</td>
-
-<td>
-<a href="Edit Book.html">
-<button>Edit</button>
-</a>
-</td>
-
-<td>
-<button onclick="deleteBook(this)">Delete</button>
-</td>
-</tr>
-
-
-<tr>
-<td>2</td>
-<td>Atomic Habits</td>
-<td>James Clear</td>
-<td>Self Development</td>
-
-<td>
-<a href="Edit Book.html">
-<button>Edit</button>
-</a>
-</td>
-
-<td>
-<button onclick="deleteBook(this)">Delete</button>
-</td>
-</tr>
-
-
-<tr>
-<td>3</td>
-<td>Harry Potter</td>
-<td>J.K Rowling</td>
-<td>Fantasy</td>
-
-<td>
-<a href="Edit Book.html">
-<button>Edit</button>
-</a>
-</td>
-
-<td>
-<button onclick="deleteBook(this)">Delete</button>
-</td>
-</tr>
-
-</table>
-
-
-<script>
-
-function deleteBook(button){
-
-    var row = button.parentNode.parentNode;
-    row.remove();
-
-}
-
-</script>
-<script src="AddorEdit.js"></script>
-
+    <script src="javascript/AddorEdit.js"></script>
+    <script src="javascript/manage-books.js"></script>
+    <script src="javascript/star.js"></script>
 </body>
 </html>
