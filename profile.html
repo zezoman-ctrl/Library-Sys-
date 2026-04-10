@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="style/profile.css">
+</head>
+<body>
+    <div id="stars" class="stars"></div>
+
+    <nav></nav>
+
+    <div class="profile-container">
+        <h2>My Profile</h2>
+        
+        <div class="avatar">
+            <span id="initials">U</span>
+        </div>
+
+        <form id="profile-form">
+            <label for="profile-name">Full Name</label>
+            <input type="text" id="profile-name" required>
+
+            <label for="profile-email">Email Address</label>
+            <input type="email" id="profile-email" readonly>
+
+            <label for="current-password">Current Password (Required to save changes)</label>
+            <input type="password" id="current-password" required placeholder="Verify current password">
+
+            <label for="profile-password">New Password (Leave blank to keep current)</label>
+            <input type="password" id="profile-password" placeholder="New password">
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <script src="javascript/star.js"></script>
+    <script src="javascript/navbar.js"></script>
+    <script src="javascript/profile.js"></script>
+</body>
+</html>
