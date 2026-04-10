@@ -3,24 +3,19 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/style/book_style.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		/>
 		<title>Book</title>
 	</head>
 	<body>
-		<nav>
-			<table width="100%" border="2" bgcolor="lightgray">
-				<tr>
-					<td>
-						<center><a href="Welcome.html">Home</a></center>
-					</td>
-					<td>
-						<center><a href="books.html">Books</a></center>
-					</td>
-					<td>
-						<center><a href="#">Contact</a></center>
-					</td>
-				</tr>
-			</table>
-		</nav>
+		<div class="loader"><div></div></div>
+		<div class="stars" id="stars"></div>
+
+		<nav></nav>
+
 		<div class="container" style="padding: 50px">
 			<div class="con" style="display: flex; gap: 20px">
 				<div class="image" style="height: 400px">
@@ -32,15 +27,30 @@
 				</div>
 				<div class="book_info">
 					<p>Math/</p>
-					<h1>Calculus</h1>
-					<h2>Author: Michael Spivak</h2>
-					<p>Fourth Edition</p>
-					<p>Category: Calculus</p>
-					<p>Published: 2008</p>
-					<p>Pages: 680</p>
-					<p>Rating: 3.7</p>
-					<p>Status: Available</p>
-					<button>Borrow</button>
+					<h1 class="book_name">Calculus</h1>
+					<h2 class="book_author">Author: Michael Spivak</h2>
+					<div class="book_meta">
+						<p>Fourth Edition</p>
+						<p>Category: Calculus</p>
+						<p>Published: 2008</p>
+						<p>Pages: 680</p>
+						<div class="rating">
+							<p>Rating: 3.5</p>
+							<div class="stars">
+								<i class="fa-solid fa-star"></i>
+								<i class="fa-solid fa-star"></i>
+								<i class="fa-solid fa-star"></i>
+								<i class="fa-solid fa-star-half-stroke"></i>
+								<i class="fa-regular fa-star"></i>
+							</div>
+						</div>
+					</div>
+					<div id="status">
+						Status:
+						<p>Available</p>
+					</div>
+					<button class="btn borrow_btn">Borrow</button>
+					<div id="toast" class="toast">📚 Book borrowed successfully!</div>
 				</div>
 			</div>
 			<div class="desc">
@@ -63,5 +73,8 @@
 				</p>
 			</div>
 		</div>
+		<script src="javascript/navbar.js"></script>
+		<script src="javascript/star.js"></script>
+		<script src="javascript/book.js"></script>
 	</body>
 </html>
