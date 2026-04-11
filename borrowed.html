@@ -4,14 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Borrowed Books — Online Library</title>
+    <link rel="icon" type="image/png" href="style/favicon-32x32.png">
     <link rel="stylesheet" href="style/style2.css" />
+    <link rel="stylesheet" href="style/style.css" />
 </head>
 <body>
 
     <nav></nav>
 
     <main class="page">
-
         <div class="page-header">
             <h1>Borrowed Books</h1>
             <p>Track all currently borrowed books and their due dates.</p>
@@ -19,7 +20,7 @@
 
         <div class="stats-row">
             <div class="stat-card">
-                <div class="stat-num" id="totalCount">2</div>
+                <div class="stat-num" id="totalCount">0</div>
                 <div class="stat-label">Currently Borrowed</div>
             </div>
             <div class="stat-card">
@@ -53,34 +54,14 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="borrowedTableBody">
-                    <tr data-book data-title="a brief history of time" data-author="stephen hawking" data-due="2026-03-29">
-                        <td class="book-id">002</td>
-                        <td class="book-title">A Brief History of Time</td>
-                        <td class="book-author">Stephen Hawking</td>
-                        <td><span class="badge badge-category">Science</span></td>
-                        <td class="date-cell">2026-03-02</td>
-                        <td class="date-cell due-date">2026-03-29</td>
-                        <td><span class="badge badge-borrowed"><span>&#9679;</span> Borrowed</span></td>
-                    </tr>
-                    <tr data-book data-title="meditations" data-author="marcus aurelius" data-due="2026-03-20">
-                        <td class="book-id">005</td>
-                        <td class="book-title">Meditations</td>
-                        <td class="book-author">Marcus Aurelius</td>
-                        <td><span class="badge badge-category">Philosophy</span></td>
-                        <td class="date-cell">2026-02-20</td>
-                        <td class="date-cell due-date">2026-03-20</td>
-                        <td><span class="badge badge-borrowed"><span>&#9679;</span> Borrowed</span></td>
-                    </tr>
-                </tbody>
+                <tbody id="borrowedTableBody"></tbody>
             </table>
 
             <div id="emptyState" class="empty-state" style="display:none;">
                 <div class="empty-icon">&#9989;</div>
-                <p>No borrowed books match your filter.</p>
+                <p>No borrowed books found.</p>
             </div>
         </div>
-
     </main>
 
     <div id="toastBox"></div>

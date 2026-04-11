@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Books — Online Library</title>
+    <link rel="icon" type="image/png" href="style/favicon-32x32.png">
     <link rel="stylesheet" href="style/style2.css" />
+    <link rel="stylesheet" href="style/style.css" />
 </head>
 <body>
 
@@ -17,18 +19,17 @@
             <p>Browse and search our complete book collection.</p>
         </div>
 
-        <!-- Stats -->
         <div class="stats-row">
             <div class="stat-card">
-                <div class="stat-num" id="totalCount">5</div>
+                <div class="stat-num" id="totalCount">0</div>
                 <div class="stat-label">Total Books</div>
             </div>
             <div class="stat-card">
-                <div class="stat-num" id="availableCount">3</div>
+                <div class="stat-num" id="availableCount">0</div>
                 <div class="stat-label">Available</div>
             </div>
             <div class="stat-card">
-                <div class="stat-num" id="borrowedCount">2</div>
+                <div class="stat-num" id="borrowedCount">0</div>
                 <div class="stat-label">Borrowed</div>
             </div>
         </div>
@@ -40,11 +41,6 @@
             </div>
             <select class="filter-select" id="categoryFilter">
                 <option value="">All Categories</option>
-                <option value="romance">Romance</option>
-                <option value="science">Science</option>
-                <option value="history">History</option>
-                <option value="technology">Technology</option>
-                <option value="philosophy">Philosophy</option>
             </select>
             <select class="filter-select" id="statusFilter">
                 <option value="">All Status</option>
@@ -65,53 +61,12 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="booksTableBody">
-                    <tr data-book data-title="jane eyre" data-author="charlotte brontë" data-category="romance" data-status="available">
-                        <td class="book-id">001</td>
-                        <td class="book-title">Jane Eyre</td>
-                        <td class="book-author">Charlotte Brontë</td>
-                        <td><span class="badge badge-category">Romance</span></td>
-                        <td class="book-desc">Gothic romance novel and coming-of-age story.</td>
-                        <td><span class="badge badge-available"><span>&#9679;</span> Available</span></td>
-                    </tr>
-                    <tr data-book data-title="a brief history of time" data-author="stephen hawking" data-category="science" data-status="borrowed">
-                        <td class="book-id">002</td>
-                        <td class="book-title">A Brief History of Time</td>
-                        <td class="book-author">Stephen Hawking</td>
-                        <td><span class="badge badge-category">Science</span></td>
-                        <td class="book-desc">Exploration of cosmology and black holes.</td>
-                        <td><span class="badge badge-borrowed"><span>&#9679;</span> Borrowed</span></td>
-                    </tr>
-                    <tr data-book data-title="sapiens" data-author="yuval noah harari" data-category="history" data-status="available">
-                        <td class="book-id">003</td>
-                        <td class="book-title">Sapiens</td>
-                        <td class="book-author">Yuval Noah Harari</td>
-                        <td><span class="badge badge-category">History</span></td>
-                        <td class="book-desc">Humankind from the Stone Age to today.</td>
-                        <td><span class="badge badge-available"><span>&#9679;</span> Available</span></td>
-                    </tr>
-                    <tr data-book data-title="clean code" data-author="robert c. martin" data-category="technology" data-status="available">
-                        <td class="book-id">004</td>
-                        <td class="book-title">Clean Code</td>
-                        <td class="book-author">Robert C. Martin</td>
-                        <td><span class="badge badge-category">Technology</span></td>
-                        <td class="book-desc">Writing readable and maintainable code.</td>
-                        <td><span class="badge badge-available"><span>&#9679;</span> Available</span></td>
-                    </tr>
-                    <tr data-book data-title="meditations" data-author="marcus aurelius" data-category="philosophy" data-status="borrowed">
-                        <td class="book-id">005</td>
-                        <td class="book-title">Meditations</td>
-                        <td class="book-author">Marcus Aurelius</td>
-                        <td><span class="badge badge-category">Philosophy</span></td>
-                        <td class="book-desc">Stoic philosophy by the Roman Emperor.</td>
-                        <td><span class="badge badge-borrowed"><span>&#9679;</span> Borrowed</span></td>
-                    </tr>
-                </tbody>
+                <tbody id="booksTableBody"></tbody>
             </table>
 
             <div id="emptyState" class="empty-state" style="display:none;">
                 <div class="empty-icon">&#128214;</div>
-                <p>No books match your search.</p>
+                <p>No books found. Add books from the Manage Books page.</p>
             </div>
         </div>
 

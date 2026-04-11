@@ -1,73 +1,89 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('searchInput');
-    const statusFilter = document.getElementById('statusFilter');
     const tableBody = document.getElementById('borrowedTableBody');
     const totalCount = document.getElementById('totalCount');
     const overdueCount = document.getElementById('overdueCount');
-
-    const allRows = Array.from(tableBody.querySelectorAll('tr[data-book]'));
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
-    allRows.forEach(row => {
-        const dueDateStr = row.dataset.due;
-        if (!dueDateStr) return;
-        const due = new Date(dueDateStr);
-        due.setHours(0, 0, 0, 0);
-
-        if (due < today) {
-            row.dataset.overdue = 'true';
-            const dueTd = row.querySelector('.due-date');
-            if (dueTd) dueTd.classList.add('date-overdue');
-            const badge = row.querySelector('.badge');
-            if (badge) {
-                badge.className = 'badge badge-overdue';
-                badge.innerHTML = '<span>&#9679;</span> Overdue';
-            }
-            showToast(`"${row.dataset.title}" is overdue!`, 'error');
-        }
-    });
-
-    function updateStats(visibleRows) {
-        totalCount.textContent = visibleRows.length;
-        overdueCount.textContent = visibleRows.filter(r => r.dataset.overdue === 'true').length;
+function getBorrowedBooks() {
+        return JSON.parse(localStorage.getItem('borrowedBooks')) || [];
     }
 
-    function filterRows() {
+    function getBookDetails(id) {
+        const books = JSON.parse(localStorage.getItem('library_books')) || [];
+        return books.find(b => String(b.ID || b.id) === String(id)) || {};
+    }
+
+    function renderBorrowed() {
+        const borrowed = getBorrowedBooks();
         const query = searchInput.value.toLowerCase().trim();
         const statusVal = statusFilter.value;
-        const visible = [];
 
-        allRows.forEach(row => {
-            const title = (row.dataset.title || '').toLowerCase();
-            const author = (row.dataset.author || '').toLowerCase();
-            const isOverdue = row.dataset.overdue === 'true';
+        tableBody.innerHTML = '';
+        let total = 0, overdue = 0;
 
-            const matchSearch = !query || title.includes(query) || author.includes(query);
+        borrowed.forEach(entry => {
+            const id = String(entry.ID || entry.id || entry.bookId || '');
+            const details = getBookDetails(id);
+            const title = String(entry.bookName || details.bookName || details.title || '');
+            const author = String(entry.author || details.author || '');
+            const category = String(entry.category || details.category || '');
+            const borrowDate = String(entry.borrowDate || entry.BorrowDate || '');
+            const dueDate = String(entry.dueDate || entry.DueDate || entry.returnDate || '');
+
+            const due = new Date(dueDate);
+            due.setHours(0, 0, 0, 0);
+            const isOverdue = dueDate && due < today;
+
+            const matchSearch = !query ||
+                title.toLowerCase().includes(query) ||
+                author.toLowerCase().includes(query);
             const matchStatus =
                 statusVal === '' ||
                 (statusVal === 'borrowed' && !isOverdue) ||
                 (statusVal === 'overdue' && isOverdue);
 
-            if (matchSearch && matchStatus) {
-                row.style.display = '';
-                visible.push(row);
-            } else {
-                row.style.display = 'none';
+            if (!matchSearch || !matchStatus) return;
+
+            total++;
+            if (isOverdue) {
+                overdue++;
+                showToast(`"${title}" is overdue!`, 'error');
             }
+
+            const statusBadge = isOverdue
+                ? `<span class="badge badge-overdue"><span>&#9679;</span> Overdue</span>`
+                : `<span class="badge badge-borrowed"><span>&#9679;</span> Borrowed</span>`;
+
+            const dueTdClass = isOverdue ? 'date-cell due-date date-overdue' : 'date-cell due-date';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="book-id">${id.padStart(3, '0')}</td>
+                <td class="book-title">${title}</td>
+                <td class="book-author">${author}</td>
+                <td><span class="badge badge-category">${category}</span></td>
+                <td class="date-cell">${borrowDate}</td>
+                <td class="${dueTdClass}">${dueDate}</td>
+                <td>${statusBadge}</td>
+            `;
+            tableBody.appendChild(tr);
         });
 
-        const emptyState = document.getElementById('emptyState');
-        if (emptyState) emptyState.style.display = visible.length === 0 ? '' : 'none';
+        totalCount.textContent = total;
+        overdueCount.textContent = overdue;
 
-        updateStats(visible);
+        const emptyState = document.getElementById('emptyState');
+        if (emptyState) emptyState.style.display = total === 0 ? '' : 'none';
     }
 
-    searchInput.addEventListener('input', filterRows);
-    statusFilter.addEventListener('change', filterRows);
+    searchInput.addEventListener('input', renderBorrowed);
+    statusFilter.addEventListener('change', renderBorrowed);
 
-    filterRows();
+    renderBorrowed();
 });
+
 function showToast(message, type = 'success') {
     let toastBox = document.getElementById('toastBox');
     if (!toastBox) {
