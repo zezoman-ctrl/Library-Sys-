@@ -1,46 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Borrowed Books - Online Library</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Borrowed Books — Online Library</title>
+    <link rel="stylesheet" href="style2.css" />
 </head>
 <body>
 
-  <h1>Borrowed Books</h1>
+    <nav>
+        <a class="nav-brand" href="#">&#128214; Library</a>
+        <ul class="nav-links">
+            <li><a href="books_pages.html">Books</a></li>
+            <li><a href="borrowed.html" class="active">Borrowed</a></li>
+        </ul>
+    </nav>
 
-  <table border="1" cellpadding="6" cellspacing="0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Book Name</th>
-        <th>Author</th>
-        <th>Category</th>
-        <th>Borrow Date</th>
-        <th>Due Date</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>002</td>
-        <td>A Brief History of Time</td>
-        <td>Stephen Hawking</td>
-        <td>Science</td>
-        <td>2026-03-02</td>
-        <td>2026-03-29</td>
-        <td>Borrowed</td>
-      </tr>
-      <tr>
-        <td>005</td>
-        <td>Meditations</td>
-        <td>Marcus Aurelius</td>
-        <td>Philosophy</td>
-        <td>2026-02-20</td>
-        <td>2026-03-20</td>
-        <td>Borrowed</td>
-      </tr>
-    </tbody>
-  </table>
+    <main class="page">
 
+        <div class="page-header">
+            <h1>Borrowed Books</h1>
+            <p>Track all currently borrowed books and their due dates.</p>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-num" id="totalCount">2</div>
+                <div class="stat-label">Currently Borrowed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="overdueCount">0</div>
+                <div class="stat-label">Overdue</div>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-wrap">
+                <span class="search-icon">&#128269;</span>
+                <input type="text" id="searchInput" placeholder="Search by title or author…" autocomplete="off" />
+            </div>
+            <select class="filter-select" id="statusFilter">
+                <option value="">All</option>
+                <option value="borrowed">On Time</option>
+                <option value="overdue">Overdue</option>
+            </select>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Book Name</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Borrow Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="borrowedTableBody">
+                    <tr data-book data-title="a brief history of time" data-author="stephen hawking" data-due="2026-03-29">
+                        <td class="book-id">002</td>
+                        <td class="book-title">A Brief History of Time</td>
+                        <td class="book-author">Stephen Hawking</td>
+                        <td><span class="badge badge-category">Science</span></td>
+                        <td class="date-cell">2026-03-02</td>
+                        <td class="date-cell due-date">2026-03-29</td>
+                        <td><span class="badge badge-borrowed"><span>&#9679;</span> Borrowed</span></td>
+                    </tr>
+                    <tr data-book data-title="meditations" data-author="marcus aurelius" data-due="2026-03-20">
+                        <td class="book-id">005</td>
+                        <td class="book-title">Meditations</td>
+                        <td class="book-author">Marcus Aurelius</td>
+                        <td><span class="badge badge-category">Philosophy</span></td>
+                        <td class="date-cell">2026-02-20</td>
+                        <td class="date-cell due-date">2026-03-20</td>
+                        <td><span class="badge badge-borrowed"><span>&#9679;</span> Borrowed</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div id="emptyState" class="empty-state" style="display:none;">
+                <div class="empty-icon">&#9989;</div>
+                <p>No borrowed books match your filter.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="toastBox"></div>
+
+    <script src="javascript/navbar.js"></script>
+    <script src="javascript/search.js"></script>
+    <script src="javascript/star.js"></script>
+    <script src="javascript/borrowed.js"></script>
 </body>
 </html>
