@@ -8,34 +8,42 @@
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 		/>
+	<script src="javascript/redirectToBooks.js"></script>
 		<title>Book</title>
 	</head>
 	<body>
+		<div class="backtologin">
+			<p>
+				You don't have an account yet. Please log in or sign up to borrow books.
+			</p>
+			<p>
+				<a href="login.html">Log in</a> or <a href="signup.html">Sign up</a>
+			</p>
+			<button>Close</button>
+		</div>
 		<div class="loader"><div></div></div>
 		<div class="stars" id="stars"></div>
 
 		<nav></nav>
 
-		<div class="container" style="padding: 50px">
-			<div class="con" style="display: flex; gap: 20px">
-				<div class="image" style="height: 400px">
+		<div class="container" >
+			<div class="con">
+				<div class="image" >
 					<img
-						src="/assets/0010431975-L.jpg"
-						alt="Calculus"
-						style="height: 100%"
+						src="/assets/10016630_27277.jpg"
+						alt=" Default Book Cover"
 					/>
 				</div>
 				<div class="book_info">
-					<p>Math/</p>
-					<h1 class="book_name">Calculus</h1>
-					<h2 class="book_author">Author: Michael Spivak</h2>
+					<p class="book_category"></p>
+					<h1 class="book_name"></h1>
+					<h2 class="book_author"></h2>
 					<div class="book_meta">
-						<p>Fourth Edition</p>
-						<p>Category: Calculus</p>
-						<p>Published: 2008</p>
-						<p>Pages: 680</p>
+						<p>Category: <span></span></p>
+						<p>Borrowed On: <span></span></p>
+						<p>Due Date: <span></span></p>
 						<div class="rating">
-							<p>Rating: 3.5</p>
+							<p>Rating: <span>3.5</span></p>
 							<div class="stars">
 								<i class="fa-solid fa-star"></i>
 								<i class="fa-solid fa-star"></i>
@@ -51,25 +59,16 @@
 					</div>
 					<button class="btn borrow_btn">Borrow</button>
 					<div id="toast" class="toast">📚 Book borrowed successfully!</div>
+					<p id="borrowed-books-link">Go to <a href="borrowed.html">Borrowed Books</a></p>
 				</div>
 			</div>
 			<div class="desc">
 				<h1>Description</h1>
-				<p>
-					Spivak's celebrated textbook is widely held as one of the finest
-					introductions to mathematical analysis. His aim is to present calculus
-					as the first real encounter with mathematics: it is the place to learn
-					how logical reasoning combined with fundamental concepts can be
-					developed into a rigorous mathematical theory rather than a bunch of
-					tools and techniques learned by rote. Since analysis is a subject
-					students traditionally find difficult to grasp, Spivak provides
-					leisurely explanations, a profusion of examples, a wide range of
-					exercises and plenty of illustrations in an easy-going approach that
-					enlightens difficult concepts and rewards effort. Calculus will
-					continue to be regarded as a modern classic, ideal for honours
-					students and mathematics majors, who seek an alternative to doorstop
-					textbooks on calculus, and the more formidable introductions to real
-					analysis.
+				<p class="book_description">
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto
+					repudiandae obcaecati consequuntur mollitia neque ea, beatae vero
+					dolorem voluptates harum amet hic error quia iure sint magnam a
+					molestias.
 				</p>
 			</div>
 		</div>

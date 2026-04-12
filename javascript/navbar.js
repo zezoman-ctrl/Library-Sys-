@@ -7,7 +7,6 @@ let isLoggedIn = currentUser !== null;
 const guestNav = [
     {text: 'Home', href: 'Welcome.html'},
     {text: 'Books', href: 'books_pages.html'},
-    {text: 'Book Details', href: 'book.html'},
     {text: 'Log In', href: 'login.html'},
     {text: 'Sign Up', href: 'signup.html'}
 ];
@@ -15,7 +14,6 @@ const guestNav = [
 const userNav = [
     {text: 'Home', href: 'Welcome.html'},
     {text: 'Books', href: 'books_pages.html'},
-    {text: 'Book Details', href: 'book.html'},
     {text: 'Borrowed', href: 'borrowed.html'},
     {text: 'Profile', href: 'profile.html'},
     {text: 'Log Out', href: '#', action: (e) => { 
