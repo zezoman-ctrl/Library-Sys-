@@ -48,6 +48,9 @@
                 : `<span class="badge badge-available"><span>&#9679;</span> Available</span>`;
 
             const tr = document.createElement('tr');
+            tr.dataset.id = id;
+            tr.style.cursor = 'pointer';
+            tr.title = 'Click to view book details';
             tr.innerHTML = `
                 <td class="book-id">${id.padStart(3, '0')}</td>
                 <td class="book-title">${title}</td>
@@ -56,6 +59,11 @@
                 <td class="book-desc">${desc}</td>
                 <td>${statusBadge}</td>
             `;
+
+            tr.addEventListener('click', function () {
+                window.location.href = `book.html?id=${id}`;
+            });
+
             tableBody.appendChild(tr);
         });
 
