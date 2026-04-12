@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Borrowed Books — Online Library</title>
+    <link rel="icon" type="image/png" href="style/favicon-32x32.png">
+    <link rel="stylesheet" href="style/style2.css" />
+    <link rel="stylesheet" href="style/style.css" />
+</head>
+<body>
+
+    <nav></nav>
+
+    <main class="page">
+        <div class="stars" id="stars"></div>
+        <div class="page-header">
+            <h1>Borrowed Books</h1>
+            <p>Track all currently borrowed books and their due dates.</p>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-num" id="totalCount">0</div>
+                <div class="stat-label">Currently Borrowed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="overdueCount">0</div>
+                <div class="stat-label">Overdue</div>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-wrap">
+                <span class="search-icon">&#128269;</span>
+                <input type="text" id="searchInput" placeholder="Search by title or author…" autocomplete="off" />
+            </div>
+            <select class="filter-select" id="statusFilter">
+                <option value="">All</option>
+                <option value="borrowed">On Time</option>
+                <option value="overdue">Overdue</option>
+            </select>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Book Name</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Borrow Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="borrowedTableBody"></tbody>
+            </table>
+
+            <div id="emptyState" class="empty-state" style="display:none;">
+                <div class="empty-icon">&#9989;</div>
+                <p>No borrowed books found.</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="toastBox"></div>
+
+    <script src="javascript/search.js"></script>
+    <script src="javascript/star.js"></script>
+    <script src="javascript/borrowed.js"></script>
+    <script src="javascript/navbar.js"></script>
+</body>
+</html>
