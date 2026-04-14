@@ -47,7 +47,6 @@ function updateNavbar() {
         
         greeting.style.color = '#00d2ff';
         greeting.style.fontWeight = '600';
-        greeting.style.marginLeft = 'auto';
         greeting.style.padding = '10px 20px';
         greeting.style.letterSpacing = '1px';
         greeting.style.textShadow = '0 0 10px rgba(0, 210, 255, 0.5)';

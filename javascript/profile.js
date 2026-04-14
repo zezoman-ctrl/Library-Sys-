@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const emailInput = document.getElementById('profile-email');
     const currentPassInput = document.getElementById('current-password'); 
     const newPassInput = document.getElementById('profile-password');
-    const initialsDisplay = document.getElementById('initials');
     const profileForm = document.getElementById('profile-form');
 
     nameInput.value = currentUser.name;

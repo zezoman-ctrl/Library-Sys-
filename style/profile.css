@@ -16,23 +16,41 @@ body {
 }
 
 
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-    width: 100%;
+nav{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
     backdrop-filter: blur(10px);
-    z-index: 20;
 }
-nav a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    transition: 0.3s;
+
+nav a{
+    color:white;
+    text-decoration:none;
+    padding:10px 20px;
+    border-radius:10px;
+    transition:0.3s;
+    position:relative;
 }
-nav a:hover { background: rgba(255,255,255,0.1); }
+
+nav a::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:0%;
+    height:2px;
+    background:#ffffff;
+    transition:0.3s;
+}
+
+nav a:hover{
+    transform:translateY(-5px) scale(1.1);
+}
+
+nav a:hover::after{
+    width:100%;
+}
 
 /* Profile Container */
 .profile-container {
