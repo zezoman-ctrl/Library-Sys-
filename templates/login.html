@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- ربط ملف الـ CSS باستخدام static -->
+    <link rel="stylesheet" href="{% static 'style/auth.css' %}">
+</head>
+<body>
+    <div id="stars" class="stars"></div>
+
+    <div class="auth-container">
+        <h2>Login</h2>
+        
+        <!-- تعديل الـ action ليرسل البيانات لـ View الدخول في ديجانجو -->
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %} <!-- سطر الحماية الإلزامي لأي Form -->
+            
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="auth-footer">
+            <!-- تعديل الروابط لتستخدم نظام الـ URL بتاع ديجانجو -->
+            <div>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></div>
+            <div class="divider">Or</div>
+            <a href="{% url 'welcome' %}">Continue as Guest</a>
+        </div>
+    </div>
+
+    <!-- ربط ملفات الـ JavaScript باستخدام static -->
+    <script src="{% static 'javascript/star.js' %}"></script>
+    <script src="{% static 'javascript/auth.js' %}"></script>
+</body>
+</html>

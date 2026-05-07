@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <!-- ربط ملفات الـ CSS باستخدام static -->
+    <link rel="stylesheet" href="{% static 'style/auth.css' %}">
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+</head>
+<body>
+    <div id="stars" class="stars"></div>
+
+    <div class="auth-container">
+        <h2>Sign Up</h2>
+        
+        <!-- تعديل الـ action ليناسب Django والـ method لـ post -->
+        <form action="{% url 'signup' %}" method="post">
+            {% csrf_token %} <!-- حماية أساسية في ديجانجو -->
+            
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirm">Confirm Password</label>
+            <input type="password" id="confirm" name="confirm" required>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <div class="auth-footer">
+            <!-- تعديل رابط الـ Login ليكون ديناميكي -->
+            <div>Already have an account? <a href="{% url 'login' %}">Login</a></div>
+        </div>
+    </div>
+
+    <!-- ربط ملفات الـ JavaScript باستخدام static -->
+    <script src="{% static 'javascript/star.js' %}"></script>
+    <script src="{% static 'javascript/auth.js' %}"></script>
+</body>
+</html>

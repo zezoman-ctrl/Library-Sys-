@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Book</title>
+    <!-- ربط ملفات الـ CSS باستخدام static -->
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'style/edit-book.css' %}">
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="form-container">
+        <h2>EDIT BOOK</h2>
+        
+        <!-- تعديل الـ action والـ method -->
+        <!-- ملاحظة: غالباً هتحتاج تبعت الـ id في الـ URL بتاع الـ action -->
+        <form action="{% url 'edit_book' %}" method="POST">
+            {% csrf_token %}
+            
+            <label>System ID</label>
+            <!-- في Django بنعرض القيمة من قاعدة البيانات كده {{ book.id }} -->
+            <input type="text" name="ID" value="{{ book.id }}" readonly>
+            
+            <label>Title</label>
+            <input type="text" name="bookName" value="{{ book.title }}">
+            
+            <label>Author</label>
+            <input type="text" name="author" value="{{ book.author }}">
+            
+            <label>Category</label>
+            <div class="category-wrapper">
+                <select id="category" name="category"></select>
+                <button type="button" class="add-cat-btn" onclick="toggleNewCat()">+</button>
+            </div>
+            <div id="newCatBox" style="display: none;">
+                <input type="text" id="newCatInput" placeholder="Type new category...">
+                <button type="button" class="save-cat-btn" onclick="saveNewCategory()">Save Category</button>
+            </div>
+
+            <script>
+                var CAT_KEY = "library_categories";
+                var DEFAULT_CATS = ["Fantasy","History","Programming","Romance","Science","Self Development"];
+
+                function loadCategories() {
+                    var stored = localStorage.getItem(CAT_KEY);
+                    return stored ? JSON.parse(stored) : DEFAULT_CATS;
+                }
+
+                function saveCategories(cats) {
+                    localStorage.setItem(CAT_KEY, JSON.stringify(cats));
+                }
+
+                function populateSelect(selectedValue) {
+                    var sel = document.getElementById("category");
+                    var cats = loadCategories();
+                    sel.innerHTML = "";
+                    cats.forEach(function(c) {
+                        var opt = document.createElement("option");
+                        opt.value = c;
+                        opt.textContent = c;
+                        opt.style.background = "#111";
+                        opt.style.color = "#fff";
+                        // هنا Django بيحدد الفئة المختارة
+                        if (c === selectedValue) opt.selected = true;
+                        sel.appendChild(opt);
+                    });
+                }
+
+                function toggleNewCat() {
+                    var box = document.getElementById("newCatBox");
+                    box.style.display = box.style.display === "none" || box.style.display === "" ? "flex" : "none";
+                    if (box.style.display === "flex") document.getElementById("newCatInput").focus();
+                }
+
+                function saveNewCategory() {
+                    var input = document.getElementById("newCatInput");
+                    var name = input.value.trim();
+                    if (!name) { input.focus(); return; }
+                    var cats = loadCategories();
+                    if (cats.indexOf(name) !== -1) { alert("Category already exists."); return; }
+                    cats.push(name);
+                    cats.sort();
+                    saveCategories(cats);
+                    populateSelect(name);
+                    input.value = "";
+                    document.getElementById("newCatBox").style.display = "none";
+                }
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    document.getElementById("newCatInput").addEventListener("keydown", function(e) {
+                        if (e.key === "Enter") { e.preventDefault(); saveNewCategory(); }
+                    });
+                    
+                    // تمرير القيمة الحالية من Django للـ JavaScript
+                    populateSelect("{{ book.category }}");
+                });
+            </script>
+            
+            <label>Description</label>
+            <textarea name="description" rows="3">{{ book.description }}</textarea>
+            
+            <button type="submit">Update Library</button>
+            <!-- تعديل زر الإلغاء ليرجع لصفحة الإدارة -->
+            <a href="{% url 'manage_books' %}" class="cancel-btn">Discard Changes</a>
+        </form>
+    </div>
+
+    <!-- ربط ملفات الـ JavaScript باستخدام static -->
+    <script src="{% static 'javascript/AddorEdit.js' %}"></script>
+    <script src="{% static 'javascript/star.js' %}"></script>
+</body>
+</html>

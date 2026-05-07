@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at bottom, #111, #000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    overflow: hidden;
+}
+
+/* Background Stars Animation */
+.stars span {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: moveStars linear infinite;
+    z-index: 0;
+}
+
+@keyframes moveStars {
+    from { transform: translateY(0px); opacity: 1; }
+    to { transform: translateY(-1000px); opacity: 0; }
+}
+
+/* Form Container */
+.auth-container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 210, 255, 0.2);
+    width: 100%;
+    max-width: 400px;
+    z-index: 10;
+    animation: fadeIn 1s ease;
+}
+
+h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+}
+
+label {
+    color: #00d2ff;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px;
+    color: #fff;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #00d2ff;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+}
+
+button {
+    background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+}
+
+/* Links and Bottom Text */
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.auth-footer a {
+    color: #00d2ff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.auth-footer a:hover {
+    text-shadow: 0 0 8px rgba(0, 210, 255, 0.6);
+}
+
+.divider {
+    margin: 15px 0;
+    opacity: 0.3;
+}
+
+
+#toastBox {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999;
+}
+
+.toast {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border-left: 5px solid #00d2ff;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.3), 0 15px 35px rgba(0, 0, 0, 0.5);
+    transform: translateX(120%);
+    animation: slideIn 0.5s forwards, fadeOut 0.5s 2.5s forwards;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+/* Error Toast Style */
+.toast.error {
+    border-left: 5px solid #ff4b2b;
+    box-shadow: 0 0 15px rgba(255, 75, 43, 0.3), 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    to { transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; display: none; }
+}
