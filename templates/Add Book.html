@@ -4,104 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <title>Add New Book</title>
-    <!-- ربط ملفات الـ CSS باستخدام static -->
-    <link rel="stylesheet" href="{% static 'style/style.css' %}">
-    <link rel="stylesheet" href="{% static 'style/add-book.css' %}">
+    <link rel="stylesheet" href="{% static 'style/style.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'style/auth.css' %}?v=2"> <link rel="stylesheet" href="{% static 'style/add-book.css' %}?v=2">
 </head>
 <body>
     <div class="stars" id="stars"></div>
-    <div class="form-container">
-        <h2>NEW BOOK</h2>
+
+    <div id="toastBox">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast {% if message.tags == 'error' %}error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <nav>
+        <a href="{% url 'welcome' %}">Home</a>
+        <a href="{% url 'books_list' %}">Books</a>
+        <a href="{% url 'logout' %}">Log Out</a>
+        <span class="user-greeting" style="color: #00d2ff;">Admin Mode</span>
+    </nav>
+
+    <div class="form-container"> <h2>NEW BOOK</h2>
         
-        <!-- تعديل الـ action ليرسل البيانات للـ View المختصة وتغيير الـ method لـ POST -->
         <form action="{% url 'add_book_view' %}" method="POST">
-            {% csrf_token %} <!-- سطر الحماية الإجباري في Django -->
+            {% csrf_token %}
 
-            <label for="id">Book ID</label>
-            <input type="text" id="id" name="ID" required>
+            <label>Book ID</label>
+            <input type="text" name="ID" required placeholder="e.g. BK-101">
             
-            <label for="bookName">Book Name</label>
-            <input type="text" id="bookName" name="bookName" required>
+            <label>Book Name</label>
+            <input type="text" name="bookName" required>
             
-            <label for="author">Author</label>
-            <input type="text" id="author" name="author" required>
+            <label>Author</label>
+            <input type="text" name="author" required>
             
-            <label for="category">Category</label>
+            <label>Category</label>
             <div class="category-wrapper">
-                <select id="category" name="category"></select>
-                <button type="button" class="add-cat-btn" onclick="toggleNewCat()">+</button>
+                <select id="category" name="category" required>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="History">History</option>
+                    <option value="Programming">Programming</option>
+                    <option value="Science">Science</option>
+                </select>
             </div>
-            <div id="newCatBox" style="display: none;">
-                <input type="text" id="newCatInput" placeholder="Type new category...">
-                <button type="button" class="save-cat-btn" onclick="saveNewCategory()">Save Category</button>
-            </div>
-
-            <script>
-                var CAT_KEY = "library_categories";
-                var DEFAULT_CATS = ["Fantasy","History","Programming","Romance","Science","Self Development"];
-
-                function loadCategories() {
-                    var stored = localStorage.getItem(CAT_KEY);
-                    return stored ? JSON.parse(stored) : DEFAULT_CATS;
-                }
-
-                function saveCategories(cats) {
-                    localStorage.setItem(CAT_KEY, JSON.stringify(cats));
-                }
-
-                function populateSelect(selectedValue) {
-                    var sel = document.getElementById("category");
-                    var cats = loadCategories();
-                    sel.innerHTML = "";
-                    cats.forEach(function(c) {
-                        var opt = document.createElement("option");
-                        opt.value = c;
-                        opt.textContent = c;
-                        opt.style.background = "#111";
-                        opt.style.color = "#fff";
-                        if (c === selectedValue) opt.selected = true;
-                        sel.appendChild(opt);
-                    });
-                }
-
-                function toggleNewCat() {
-                    var box = document.getElementById("newCatBox");
-                    box.style.display = box.style.display === "none" || box.style.display === "" ? "flex" : "none";
-                    if (box.style.display === "flex") document.getElementById("newCatInput").focus();
-                }
-
-                function saveNewCategory() {
-                    var input = document.getElementById("newCatInput");
-                    var name = input.value.trim();
-                    if (!name) { input.focus(); return; }
-                    var cats = loadCategories();
-                    if (cats.indexOf(name) !== -1) { alert("Category already exists."); return; }
-                    cats.push(name);
-                    cats.sort();
-                    saveCategories(cats);
-                    populateSelect(name);
-                    input.value = "";
-                    document.getElementById("newCatBox").style.display = "none";
-                }
-
-                document.addEventListener("DOMContentLoaded", function() {
-                    document.getElementById("newCatInput").addEventListener("keydown", function(e) {
-                        if (e.key === "Enter") { e.preventDefault(); saveNewCategory(); }
-                    });
-                    populateSelect();
-                });
-            </script>
             
-            <label for="description">Description</label>
-            <textarea id="description" name="description" rows="3"></textarea>
+            <label>Description</label>
+            <textarea name="description" rows="3" placeholder="Enter book details..."></textarea>
             
             <button type="submit">Add to Library</button>
-            <button type="reset">Clear Form</button>
+            <button type="reset" class="reset-btn" style="background: rgba(255,255,255,0.1); margin-top: 10px;">Clear Form</button>
         </form>
     </div>
 
-    <!-- ربط ملفات الـ JavaScript باستخدام static -->
-    <script src="{% static 'javascript/AddorEdit.js' %}"></script>
     <script src="{% static 'javascript/star.js' %}"></script>
+    <script src="{% static 'javascript/error_message.js' %}?v=1"></script>
 </body>
 </html>

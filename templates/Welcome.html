@@ -5,22 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StarLibrary</title>
-    <!-- ربط الـ Favicon والـ CSS بنظام Django -->
     <link rel="icon" type="image/png" href="{% static 'style/favicon-32x32.png' %}">
-    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'style/style.css' %}?v=1.1">
 </head>
 
 <body>
-
     <div class="loader"><div></div></div>
     <div class="stars" id="stars"></div>
 
 <nav>
     <a href="{% url 'welcome' %}">Home</a>
-    <a href="{% url 'book_details' %}">Book Details</a>
     <a href="{% url 'books_list' %}">Books</a>
-    <a href="{% url 'login' %}">Log in</a>
-    <a href="{% url 'signup' %}">Sign up</a>
+    
+    {% if request.session.user_id %}
+        {% if request.session.is_admin %}
+            <a href="{% url 'manage_books' %}" style="color: #00d2ff; font-weight: bold;">Manage Library</a>
+        {% endif %}
+
+        <a href="{% url 'profile_update' %}">My Profile</a>
+        <a href="{% url 'logout' %}">Log Out</a>
+        
+        <span class="user-greeting">
+            Hello, {{ request.session.user_name|title }} 
+            {% if request.session.is_admin %} <span style="font-size: 0.8em; color: #ffcc00;">(Admin)</span> {% endif %}
+        </span>
+    {% else %}
+        <a href="{% url 'login' %}">Log in</a>
+        <a href="{% url 'signup' %}">Sign up</a>
+    {% endif %}
 </nav>
 
     <main>
@@ -30,8 +42,7 @@
         </div>
 
         <div class="search-bar">
-            <!-- الـ Action هنا هيكون للمسار بتاع البحث في Django مستقبلاً -->
-            <form action="{% url 'search_books' %}" method="GET">
+            <form action="{% url 'books_list' %}" method="GET">
                 <input type="text" name="query" placeholder="Search for books, authors, or topics...">
             </form>
         </div>
@@ -58,9 +69,6 @@
 
     <footer>© 2026 StarLibrary | All rights reserved</footer>
 
-    <!-- ربط ملفات الـ JavaScript بنظام static -->
-    <script src="{% static 'javascript/navbar.js' %}"></script>
-    <script src="{% static 'javascript/search.js' %}"></script>
-    <script src="{% static 'javascript/star.js' %}"></script>
+    <script src="{% static 'javascript/star.js' %}?v=1.0"></script>
 </body>
 </html>

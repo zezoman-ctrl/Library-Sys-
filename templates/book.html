@@ -4,13 +4,11 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <!-- ربط الـ CSS -->
         <link rel="stylesheet" href="{% static 'style/book_style.css' %}" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         />
-        <!-- ربط الـ JS في الـ Head -->
         <script src="{% static 'javascript/redirectToBooks.js' %}"></script>
         <title>Book</title>
     </head>
@@ -20,7 +18,6 @@
                 You don't have an account yet. Please log in or sign up to borrow books.
             </p>
             <p>
-                <!-- تعديل اللينكات لـ Django URLs -->
                 <a href="{% url 'login' %}">Log in</a> or <a href="{% url 'signup' %}">Sign up</a>
             </p>
             <button>Close</button>
@@ -33,7 +30,6 @@
         <div class="container" >
             <div class="con">
                 <div class="image" >
-                    <!-- ربط صورة غلاف الكتاب -->
                     <img
                         src="{% static 'assets/10016630_27277.jpg' %}"
                         alt=" Default Book Cover"
@@ -64,11 +60,9 @@
                     </div>
                     <button class="btn borrow_btn">Borrow</button>
                     <div id="toast" class="toast">📚 Book borrowed successfully!</div>
-                    <!-- تعديل لينك الكتب المستعارة -->
                     <p id="borrowed-books-link">Go to <a href="{% url 'borrowed_books' %}">Borrowed Books</a></p>
                 </div>
             </div>
-            <div class="desc">
                 <h1>Description</h1>
                 <p class="book_description">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iusto
@@ -79,7 +73,6 @@
             </div>
         </div>
 
-        <!-- ربط ملفات الـ JS في آخر الصفحة -->
         <script src="{% static 'javascript/navbar.js' %}"></script>
         <script src="{% static 'javascript/star.js' %}"></script>
         <script src="{% static 'javascript/book.js' %}"></script>

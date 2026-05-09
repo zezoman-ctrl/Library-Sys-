@@ -5,29 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Books - StarLibrary</title>
-    <!-- ربط الـ CSS بنظام static -->
-    <link rel="stylesheet" href="{% static 'style/style.css' %}">
-    <link rel="stylesheet" href="{% static 'style/manage-books.css' %}">
+    <link rel="stylesheet" href="{% static 'style/style.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'style/manage-books.css' %}?v=2">
 </head>
 <body>
+    <div id="toastBox"></div>
     <div class="stars" id="stars"></div>
 
-    <nav>
-        <!-- تعديل الروابط لتستخدم أسماء الـ URLs في ديجانجو -->
-        <a href="{% url 'welcome' %}">Home</a>
-        <a href="{% url 'add_book_view' %}">Add Book</a>
-        <a href="{% url 'login' %}">Logout</a>
-    </nav>
+<nav>
+    <a href="{% url 'welcome' %}">Home</a>
+    <a href="{% url 'add_book' %}" style="color: #ffcc00; font-weight: bold;">+ Add New Book</a>
+    <a href="{% url 'manage_users' %}" style="color: #00d2ff;">Manage Users</a>
+    
+    <a href="{% url 'logout' %}">Logout</a>
+</nav>
 
-    <main>
-        <h2 class="page-title">MANAGE BOOKS</h2>
-        <p class="books-count" id="booksCount"></p>
-        <div class="books-grid" id="booksGrid"></div>
+    <main style="padding: 40px 20px;">
+        <h2 class="page-title" style="text-align: center; letter-spacing: 5px; color: #fff;">MANAGE BOOKS</h2>
+        <p class="books-count" id="booksCount" style="text-align: center; color: #00d2ff;"></p>
+        
+        <div class="books-grid" id="booksGrid">
+            </div>
     </main>
 
-    <!-- ربط ملفات الـ JavaScript بنظام static -->
-    <script src="{% static 'javascript/AddorEdit.js' %}"></script>
+    <script src="{% static 'javascript/star.js' %}?v=1.0"></script>
     <script src="{% static 'javascript/manage-books.js' %}"></script>
-    <script src="{% static 'javascript/star.js' %}"></script>
 </body>
 </html>

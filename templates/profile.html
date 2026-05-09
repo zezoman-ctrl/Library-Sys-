@@ -5,49 +5,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile</title>
-    <!-- ربط ملفات الـ CSS بنظام static -->
-    <link rel="stylesheet" href="{% static 'style/profile.css' %}">
-    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'style/style.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'style/profile.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'style/auth.css' %}?v=2">
 </head>
+
 <body>
 
-    <nav></nav>
     <div class="stars" id="stars"></div>
 
-    <div class="profile-container">
-        <h2>My Profile</h2>
-        
-        <div class="avatar">
-            <!-- هنا ممكن مستقبلاً تعرض أول حرف من اسم المستخدم الفعلي باستخدام {{ user.username|slice:":1" }} -->
-            <span id="initials"></span>
-        </div>
+    <nav>
+        <a href="{% url 'welcome' %}">Home</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </nav>
 
-        <!-- تعديل الـ Form لإرسال البيانات للـ View المختصة -->
-        <form id="profile-form" action="{% url 'profile_update' %}" method="POST">
-            {% csrf_token %} <!-- حماية الـ POST -->
-
-            <label for="profile-name">Full Name</label>
-            <!-- استخدام {{ user.get_full_name }} لعرض اسم المستخدم الحالي من ديجانجو -->
-            <input type="text" id="profile-name" name="full_name" value="{{ user.get_full_name }}" required>
-
-            <label for="profile-email">Email Address</label>
-            <!-- عرض إيميل المستخدم الحالي -->
-            <input type="email" id="profile-email" name="email" value="{{ user.email }}" readonly>
-
-            <label for="current-password">Current Password (Required to save changes)</label>
-            <input type="password" id="current-password" name="current_password" required placeholder="Verify current password">
-
-            <label for="profile-password">New Password (Leave blank to keep current)</label>
-            <input type="password" id="profile-password" name="new_password" placeholder="New password">
-
-            <button type="submit">Save Changes</button>
-        </form>
+    <div id="toastBox">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast {% if message.tags == 'error' %}error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 
-    <!-- ربط ملفات الـ JavaScript بنظام static -->
-    <script src="{% static 'javascript/navbar.js' %}"></script>
-    <script src="{% static 'javascript/star.js' %}"></script>
-    <script src="{% static 'javascript/profile.js' %}"></script>
+    <div class="profile-wrapper">
+
+        <div class="profile-container">
+
+            <div class="avatar">
+                {{ user.name|slice:":1"|upper }}
+            </div>
+
+            <h2>My Profile</h2>
+
+            <form id="profile-form" method="POST">
+                {% csrf_token %}
+
+                <label>Full Name</label>
+                <input type="text" name="full_name" value="{{ user.name }}" required>
+
+                <label>Email</label>
+                <input type="email" name="email" value="{{ user.email }}" readonly>
+
+                <label>Current Password</label>
+                <input type="password" name="current_password" required>
+
+                <label>New Password</label>
+                <input type="password" name="new_password">
+
+                <button type="submit">Save Changes</button>
+
+            </form>
+
+        </div>
+
+    </div>
+    <footer>© 2026 StarLibrary | Admin Control Panel</footer>
+
+    <script src="{% static 'javascript/star.js' %}?v=1"></script>
+    <script src="{% static 'javascript/error_message.js' %}?v=1"></script>
 
 </body>
 </html>
