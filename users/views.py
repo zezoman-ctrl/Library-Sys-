@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Signup
-from books.models import Book
+from books.models import Book, Borrow
 
 
 def is_admin(request):
@@ -77,6 +77,18 @@ def profile_view(request):
         return redirect('profile_update')
     return render(request, 'profile.html', {'user': user})
 
+def my_borrowed_books(request):
+    if request.session.get('is_admin', False):
+        return redirect('welcome')
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    user = get_object_or_404(Signup, id=user_id)
+    borrowed = Borrow.objects.select_related('book').filter(user=user)
+    return render(request, 'my_borrowed.html', {
+        'borrowed_books': borrowed
+    })
+
 def manage_books(request):
     if not is_admin(request): return redirect('welcome')
     books = Book.objects.all()
@@ -86,12 +98,13 @@ def add_book_view(request):
     if not is_admin(request): return redirect('welcome')
     if request.method == 'POST':
         Book.objects.create(
-            custom_id=request.POST.get('ID'),
-            title=request.POST.get('bookName'),
-            author=request.POST.get('author'),
-            category=request.POST.get('category'),
-            description=request.POST.get('description')
-        )
+        title=request.POST.get('bookName'),
+        author=request.POST.get('author'),
+        category=request.POST.get('category'),
+        published_date=request.POST.get('published_date'),
+        description=request.POST.get('description'),
+        image=request.FILES.get('image')
+)
         messages.success(request, "Book added successfully!")
         return redirect('manage_books')
     return render(request, 'Add Book.html')
@@ -132,5 +145,58 @@ def delete_user(request, user_id):
     return redirect('manage_users')
 
 def books_list_view(request):
+
     books = Book.objects.all()
-    return render(request, 'books_list.html', {'books': books})
+
+    available_count = Book.objects.filter(available=True).count()
+
+    borrowed_count = Book.objects.filter(available=False).count()
+
+    return render(request,'books_pages.html',
+                  {
+                      'books': books,
+                      'available_count': available_count,
+                      'borrowed_count': borrowed_count
+                  })
+
+def borrow_book(request, book_id):
+
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')
+
+    user = get_object_or_404(Signup, id=user_id)
+
+    book = get_object_or_404(Book, id=book_id)
+
+    if not book.available:
+        messages.error(request, "This book is not available.")
+        return redirect('books_list')
+
+    Borrow.objects.create(
+        user=user,
+        book=book
+    )
+
+    book.available = False
+    book.save()
+
+    messages.success(request, "Book borrowed successfully!")
+
+    return redirect('books_list')
+
+def borrowed_books(request):
+
+    user_id = request.session.get('user_id')
+
+    if not user_id:
+        return redirect('login')
+
+    user = get_object_or_404(Signup, id=user_id)
+
+    borrowed = Borrow.objects.filter(user=user)
+
+    return render(request, 'borrowed.html', {
+        'borrowed_books': borrowed
+    })

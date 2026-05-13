@@ -15,20 +15,37 @@
 <nav>
     <a href="{% url 'welcome' %}">Home</a>
     <a href="{% url 'add_book' %}" style="color: #ffcc00; font-weight: bold;">+ Add New Book</a>
-    <a href="{% url 'manage_users' %}" style="color: #00d2ff;">Manage Users</a>
-    
     <a href="{% url 'logout' %}">Logout</a>
 </nav>
 
     <main style="padding: 40px 20px;">
         <h2 class="page-title" style="text-align: center; letter-spacing: 5px; color: #fff;">MANAGE BOOKS</h2>
-        <p class="books-count" id="booksCount" style="text-align: center; color: #00d2ff;"></p>
+        <p class="books-count" style="text-align: center; color: #00d2ff;">{{ books|length }} book{{ books|length|pluralize }} in library</p>
         
-        <div class="books-grid" id="booksGrid">
+        <div class="books-grid">
+            {% for book in books %}
+            <div class="book-card">
+                <span class="category-tag">{{ book.category|default:"General" }}</span>
+                <span class="book-id">ID: {{ book.id }}</span>
+                <h3>{{ book.title }}</h3>
+                <p class="book-author">by {{ book.author }}</p>
+                {% if book.description %}
+                <p class="book-desc">{{ book.description }}</p>
+                {% endif %}
+                <div class="card-actions">
+                    <a class="btn-edit" href="{% url 'edit_book' book.id %}">Edit</a>
+                    <a class="btn-delete" href="{% url 'delete_book' book.id %}" onclick="return confirm('Delete \"{{ book.title }}\" from the library?')">Delete</a>
+                </div>
             </div>
+            {% empty %}
+            <div class="empty-state">
+                <p>No books in the library yet.</p>
+                <a href="{% url 'add_book' %}">+ Add First Book</a>
+            </div>
+            {% endfor %}
+        </div>
     </main>
 
     <script src="{% static 'javascript/star.js' %}?v=1.0"></script>
-    <script src="{% static 'javascript/manage-books.js' %}"></script>
 </body>
 </html>

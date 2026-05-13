@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Borrowed Books</title>
+    <link rel="icon" type="image/png" href="{% static 'style/favicon-32x32.png' %}">
+    <link rel="stylesheet" href="{% static 'style/style2.css' %}" />
+    <link rel="stylesheet" href="{% static 'style/style.css' %}" />
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <nav>
+        <a href="{% url 'welcome' %}">Home</a>
+        <a href="{% url 'books_list' %}">Books</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+
+    <main class="page">
+        <div class="page-header">
+            <h1>My Borrowed Books</h1>
+            <p>Only books you have borrowed appear here.</p>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cover</th>
+                        <th>Title</th>
+                        <th>Borrowed Date</th>
+                        <th>Days</th>
+                        <th>Total Price</th>
+                        <th>Return Date</th>
+                        <th>Return Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in borrowed_books %}
+                    <tr>
+                        <td>
+                            {% if item.book.image %}
+                            <img src="{{ item.book.image.url }}" width="60" height="80" style="object-fit: cover; border-radius: 8px;" />
+                            {% endif %}
+                        </td>
+                        <td>{{ item.book.title }}</td>
+                        <td>{{ item.borrowed_date|date:'d-m-Y' }}</td>
+                        <td>{{ item.days }}</td>
+                        <td>${{ item.total_price }}</td>
+                        <td>{% if item.return_date %}{{ item.return_date|date:'d-m-Y' }}{% else %}-{% endif %}</td>
+                        <td>
+                            {% if item.is_returned %}
+                                <span class="badge badge-available">Returned</span>
+                            {% else %}
+                                <span class="badge badge-borrowed">Borrowed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align:center;">You have not borrowed any books yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="toastBox"></div>
+    <script src="{% static 'javascript/star.js' %}"></script>
+</body>
+</html>

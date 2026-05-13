@@ -15,19 +15,24 @@
 
 <nav>
     <a href="{% url 'welcome' %}">Home</a>
-    <a href="{% url 'books_list' %}">Books</a>
-    
-    {% if request.session.user_id %}
-        {% if request.session.is_admin %}
-            <a href="{% url 'manage_books' %}" style="color: #00d2ff; font-weight: bold;">Manage Library</a>
-        {% endif %}
+    {% if request.session.user_id and not request.session.is_admin %}
+        <a href="{% url 'books_list' %}">Books</a>
+        <a href="{% url 'my_borrowed_books' %}">My Borrowed Books</a>
+    {% endif %}
 
+    {% if request.session.user_id and request.session.is_admin %}
+        <a href="{% url 'manage_books' %}" style="color: #00d2ff; font-weight: bold;">Manage Library</a>
+        <a href="{% url 'manage_users' %}" style="color: #00d2ff; font-weight: bold;">Manage Users</a>
+    {% endif %}
+
+    {% if request.session.user_id %}
         <a href="{% url 'profile_update' %}">My Profile</a>
         <a href="{% url 'logout' %}">Log Out</a>
-        
         <span class="user-greeting">
-            Hello, {{ request.session.user_name|title }} 
-            {% if request.session.is_admin %} <span style="font-size: 0.8em; color: #ffcc00;">(Admin)</span> {% endif %}
+            Hello, {{ request.session.user_name|title }}
+            {% if request.session.is_admin %}
+                <span style="font-size: 0.8em; color: #ffcc00;">(Admin)</span>
+            {% endif %}
         </span>
     {% else %}
         <a href="{% url 'login' %}">Log in</a>

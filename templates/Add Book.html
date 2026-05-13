@@ -4,10 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Add New Book</title>
+
     <link rel="stylesheet" href="{% static 'style/style.css' %}?v=2">
-    <link rel="stylesheet" href="{% static 'style/auth.css' %}?v=2"> <link rel="stylesheet" href="{% static 'style/add-book.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'style/auth.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'style/add-book.css' %}?v=2">
 </head>
+
 <body>
+
     <div class="stars" id="stars"></div>
 
     <div id="toastBox">
@@ -22,44 +26,91 @@
 
     <nav>
         <a href="{% url 'welcome' %}">Home</a>
-        <a href="{% url 'books_list' %}">Books</a>
         <a href="{% url 'logout' %}">Log Out</a>
-        <span class="user-greeting" style="color: #00d2ff;">Admin Mode</span>
+
+        <span class="user-greeting" style="color: #00d2ff;">
+            Admin Mode
+        </span>
     </nav>
 
-    <div class="form-container"> <h2>NEW BOOK</h2>
-        
-        <form action="{% url 'add_book_view' %}" method="POST">
+    <div class="form-container">
+
+        <h2>NEW BOOK</h2>
+
+        <form action="{% url 'add_book' %}"
+              method="POST"
+              enctype="multipart/form-data">
+
             {% csrf_token %}
 
-            <label>Book ID</label>
-            <input type="text" name="ID" required placeholder="e.g. BK-101">
-            
             <label>Book Name</label>
-            <input type="text" name="bookName" required>
-            
+            <input type="text"
+                   name="bookName"
+                   required>
+
             <label>Author</label>
-            <input type="text" name="author" required>
-            
+            <input type="text"
+                   name="author"
+                   required>
+
             <label>Category</label>
+
             <div class="category-wrapper">
-                <select id="category" name="category" required>
+                <select id="category"
+                        name="category"
+                        required>
+
                     <option value="Fantasy">Fantasy</option>
                     <option value="History">History</option>
                     <option value="Programming">Programming</option>
                     <option value="Science">Science</option>
+
                 </select>
             </div>
-            
+
+            <label>Published Date</label>
+            <input type="date"
+                   name="published_date"
+                   required>
+
             <label>Description</label>
-            <textarea name="description" rows="3" placeholder="Enter book details..."></textarea>
-            
-            <button type="submit">Add to Library</button>
-            <button type="reset" class="reset-btn" style="background: rgba(255,255,255,0.1); margin-top: 10px;">Clear Form</button>
+
+            <textarea name="description"
+                      rows="3"
+                      placeholder="Enter book details..."></textarea>
+
+            <label>Borrow Price Per Day</label>
+            <input type="number"
+                   name="borrow_price_per_day"
+                   step="0.01"
+                   min="0"
+                   required>
+
+            <label>Book Image</label>
+
+            <input type="file"
+                   name="image"
+                   accept="image/*"
+                   required>
+
+            <button type="submit">
+                Add to Library
+            </button>
+
+            <button type="reset"
+                    class="reset-btn"
+                    style="background: rgba(255,255,255,0.1); margin-top: 10px;">
+
+                Clear Form
+
+            </button>
+
         </form>
+
     </div>
 
     <script src="{% static 'javascript/star.js' %}"></script>
     <script src="{% static 'javascript/error_message.js' %}?v=1"></script>
+
 </body>
 </html>

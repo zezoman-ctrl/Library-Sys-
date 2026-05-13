@@ -6,6 +6,7 @@
     <title>Edit Book - StarLibrary</title>
     <link rel="stylesheet" href="{% static 'style/style.css' %}?v=2">
     <link rel="stylesheet" href="{% static 'style/auth.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'style/edit-book.css' %}?v=2">
 </head>
 <body>
     <div id="toastBox">
@@ -20,11 +21,11 @@
     <div class="form-container">
         <h2>EDIT BOOK</h2>
         
-        <form action="{% url 'edit_book' book.id %}" method="POST">
+        <form action="{% url 'edit_book' book.id %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             
             <label>Book ID (Read Only)</label>
-            <input type="text" value="{{ book.custom_id }}" readonly style="opacity: 0.5;">
+            <input type="text" value="{{ book.id }}" readonly style="opacity: 0.5;">
             
             <label>Title</label>
             <input type="text" name="bookName" value="{{ book.title }}" required>
@@ -42,6 +43,12 @@
 
             <label style="margin-top: 20px;">Description</label>
             <textarea name="description" rows="4" style="width: 100%; background: rgba(0,0,0,0.3); color: white; border-radius: 8px;">{{ book.description }}</textarea>
+
+            <label style="margin-top: 20px;">Borrow Price Per Day</label>
+            <input type="number" name="borrow_price_per_day" value="{{ book.borrow_price_per_day }}" step="0.01" min="0" required style="width: 100%; background: rgba(0,0,0,0.3); color: white; border-radius: 8px; padding: 12px;">
+
+            <label style="margin-top: 20px;">Book Image (leave empty to keep current)</label>
+            <input type="file" name="image" accept="image/*" style="width: 100%; background: rgba(0,0,0,0.3); color: white; border-radius: 8px; padding: 12px;">
             
             <button type="submit" style="margin-top: 20px;">Update Library</button>
             <a href="{% url 'manage_books' %}" style="display: block; text-align: center; color: #aaa; margin-top: 15px; text-decoration: none;">Cancel</a>
