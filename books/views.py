@@ -61,12 +61,13 @@ def books_list_view(request):
         return redirect('welcome')
     if not request.session.get('user_id'):
         return redirect('login')
+    user_id = request.session.get('user_id')
     books = Book.objects.all()
     query = request.GET.get('query', '').strip()
     if query:
         books = books.filter(Q(title__icontains=query) | Q(author__icontains=query))
-    borrowed_count = Borrow.objects.filter(is_returned=False).count()
-    available_count = Book.objects.count() - borrowed_count
+    borrowed_count = Borrow.objects.filter(user_id=user_id, is_returned=False, return_date__gt=timezone.now()).count()
+    available_count = Book.objects.count()
     return render(request, 'books_pages.html', {
         'books': books,
         'available_count': available_count,
