@@ -83,8 +83,7 @@ def my_borrowed_books(request):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
-    user = get_object_or_404(Signup, id=user_id)
-    borrowed = Borrow.objects.select_related('book').filter(user=user)
+    borrowed = Borrow.objects.select_related('book').filter(user_id=user_id)
     return render(request, 'my_borrowed.html', {
         'borrowed_books': borrowed
     })

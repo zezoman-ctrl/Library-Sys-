@@ -37,13 +37,8 @@
                             <p>Category: <span>{{ book.category }}</span></p>
                             <p>Published: <span>{{ book.published_date|date:'d-m-Y' }}</span></p>
                             <p>Borrow Price Per Day: <span>${{ book.borrow_price_per_day }}</span></p>
-                            <p>Status: <span>{% if book.is_borrowed %}Borrowed{% else %}Available{% endif %}</span></p>
                         </div>
-                        {% if not book.is_borrowed %}
                         <a href="{% url 'borrow_book' book.id %}" class="btn borrow_btn">Borrow</a>
-                        {% else %}
-                        <span class="btn borrow_btn" style="opacity:0.65;cursor:default;">Unavailable</span>
-                        {% endif %}
                     </div>
                 </div>
                 <div class="book-description-block">

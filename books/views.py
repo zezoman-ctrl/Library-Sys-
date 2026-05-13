@@ -109,10 +109,6 @@ def borrow_book(request, book_id):
         messages.success(request, f"Book borrowed successfully for {days} days. Total price: ${total_price}")
         return redirect('books_list')
     else:
-        # Check if available
-        if Borrow.objects.filter(book=book, is_returned=False).exists():
-            messages.error(request, "This book is not available.")
-            return redirect('books_list')
         return render(request, 'borrow_modal.html', {'book': book})
 
 

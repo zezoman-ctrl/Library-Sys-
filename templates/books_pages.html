@@ -12,7 +12,7 @@
           href="{% static 'style/favicon-32x32.png' %}">
 
     <link rel="stylesheet"
-          href="{% static 'style/style2.css' %}" />
+          href="{% static 'style/style2.css' %}?v=3" />
 
     <link rel="stylesheet"
           href="{% static 'style/style.css' %}" />
@@ -86,7 +86,7 @@
                        placeholder="Search books..."
                        autocomplete="off" />
 
-                <select id="searchType">
+                <select id="searchType" class="filter-select">
                     <option value="id">ID</option>
                     <option value="name">Name</option>
                     <option value="author">Author</option>
@@ -141,11 +141,7 @@
         <td>${{ book.borrow_price_per_day }}</td>
 
         <td>
-            {% if not book.is_borrowed %}
-                <button class="borrow-btn" data-book-id="{{ book.id }}" data-price="{{ book.borrow_price_per_day }}">Borrow</button>
-            {% else %}
-                <span style="color: gray;">Unavailable</span>
-            {% endif %}
+            <button class="borrow-btn" data-book-id="{{ book.id }}" data-price="{{ book.borrow_price_per_day }}">Borrow</button>
         </td>
 
     </tr>
@@ -199,7 +195,7 @@
         </div>
     </div>
 
-    <script src="{% static 'javascript/search.js' %}"></script>
+    <script src="{% static 'javascript/search.js' %}?v=2"></script>
     <script src="{% static 'javascript/star.js' %}"></script>
     <script>
         // Modal functionality

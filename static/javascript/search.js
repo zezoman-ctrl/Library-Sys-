@@ -7,14 +7,14 @@ function filterBooks() {
     if (!tableBody) return;
     const query = searchInput.value.toLowerCase().trim();
     const type = searchType ? searchType.value : 'name';
-    const category = categoryFilter ? categoryFilter.value : '';
+    const category = categoryFilter ? categoryFilter.value.toLowerCase().trim() : '';
     const rows = tableBody.querySelectorAll('tr');
 
     rows.forEach(row => {
         const id = row.getAttribute('data-id') || '';
         const name = row.getAttribute('data-name') || '';
         const author = row.getAttribute('data-author') || '';
-        const cat = row.getAttribute('data-category') || '';
+        const cat = (row.getAttribute('data-category') || '').toLowerCase().trim();
 
         let matchesQuery = false;
         if (query) {
@@ -36,7 +36,7 @@ function filterBooks() {
             matchesQuery = true;
         }
 
-        const matchesCategory = category === '' || cat === category;
+        const matchesCategory = category === '' || cat.includes(category);
 
         if (matchesQuery && matchesCategory) {
             row.style.display = '';
