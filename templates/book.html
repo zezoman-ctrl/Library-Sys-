@@ -38,7 +38,7 @@
                             <p>Published: <span>{{ book.published_date|date:'d-m-Y' }}</span></p>
                             <p>Borrow Price Per Day: <span>${{ book.borrow_price_per_day }}</span></p>
                         </div>
-                        <a href="{% url 'borrow_book' book.id %}" class="btn borrow_btn">Borrow</a>
+                        <button class="btn borrow_btn" data-book-id="{{ book.id }}" data-price="{{ book.borrow_price_per_day }}">Borrow</button>
                     </div>
                 </div>
                 <div class="book-description-block">
@@ -48,6 +48,64 @@
             </div>
         </main>
 
+        <!-- Borrow Modal -->
+        <div id="borrowModal" class="modal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+            <div class="modal-content" style="background-color: #111; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 400px; border-radius: 8px; color: white;">
+                <span class="close" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+                <h2>Borrow Book</h2>
+                <p id="bookTitle"></p>
+                <form id="borrowForm" method="post" action="">
+                    {% csrf_token %}
+                    <label for="days">Number of days:</label>
+                    <input type="number" id="days" name="days" min="1" required style="width: 100%; padding: 8px; margin: 10px 0; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px;">
+                    <p>Daily price: $<span id="dailyPrice"></span></p>
+                    <p>Total price: $<span id="totalPrice"></span></p>
+                    <button type="submit" style="background: #00d2ff; color: black; padding: 10px; border: none; border-radius: 4px; cursor: pointer;">Confirm Borrow</button>
+                </form>
+            </div>
+        </div>
+
         <script src="{% static 'javascript/star.js' %}"></script>
+        <script>
+            // Modal functionality
+            const modal = document.getElementById('borrowModal');
+            const closeBtn = document.querySelector('.close');
+            const borrowBtn = document.querySelector('.borrow_btn');
+            const daysInput = document.getElementById('days');
+            const dailyPriceSpan = document.getElementById('dailyPrice');
+            const totalPriceSpan = document.getElementById('totalPrice');
+            const borrowForm = document.getElementById('borrowForm');
+            const bookTitle = document.getElementById('bookTitle');
+
+            let currentBookId = null;
+            let currentPrice = 0;
+
+            borrowBtn.addEventListener('click', function() {
+                currentBookId = this.getAttribute('data-book-id');
+                currentPrice = parseFloat(this.getAttribute('data-price'));
+                const bookName = document.querySelector('.book_name').textContent.trim();
+                bookTitle.textContent = `Book: ${bookName}`;
+                dailyPriceSpan.textContent = currentPrice.toFixed(2);
+                totalPriceSpan.textContent = '0.00';
+                borrowForm.action = `/borrow/${currentBookId}/`;
+                modal.style.display = 'block';
+            });
+
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            daysInput.addEventListener('input', function() {
+                const days = parseInt(this.value) || 0;
+                const total = currentPrice * days;
+                totalPriceSpan.textContent = total.toFixed(2);
+            });
+        </script>
     </body>
 </html>
