@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 from .models import Book, Borrow
@@ -80,8 +81,13 @@ def book_detail_view(request, book_id):
         return redirect('welcome')
     if not request.session.get('user_id'):
         return redirect('login')
+    user_id = request.session.get('user_id')
     book = get_object_or_404(Book, id=book_id)
-    return render(request, 'book.html', {'book': book})
+    current_borrow = Borrow.objects.filter(user_id=user_id, book=book, is_returned=False).first()
+    return render(request, 'book.html', {
+        'book': book,
+        'borrow_record': current_borrow
+    })
 
 
 def borrow_book(request, book_id):
@@ -93,6 +99,12 @@ def borrow_book(request, book_id):
     user = get_object_or_404(Signup, id=user_id)
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
+        if not book.available:
+            messages.error(request, "This book is already borrowed.")
+            return redirect('books_list')
+        if Borrow.objects.filter(user=user, book=book, is_returned=False).exists():
+            messages.error(request, "You have already borrowed this book.")
+            return redirect('books_list')
         days = int(request.POST.get('days', 0))
         if days <= 0:
             messages.error(request, "Invalid number of days.")
@@ -100,14 +112,30 @@ def borrow_book(request, book_id):
         total_price = book.borrow_price_per_day * days
         from datetime import timedelta
         return_date = timezone.now() + timedelta(days=days)
-        Borrow.objects.create(
+        borrow = Borrow.objects.create(
             user=user,
             book=book,
             days=days,
             total_price=total_price,
             return_date=return_date
         )
-        messages.success(request, f"Book borrowed successfully for {days} days. Total price: ${total_price}")
+        book.available = False
+        book.save()
+        message = f"Book borrowed successfully for {days} days. Total price: ${total_price}"
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': message,
+                'borrow_id': borrow.id,
+                'borrow_details': {
+                    'borrowed_date': borrow.borrowed_date.strftime('%d-%m-%Y'),
+                    'end_date': borrow.return_date.strftime('%d-%m-%Y'),
+                    'days': borrow.days,
+                    'total_price': str(borrow.total_price)
+                },
+                'book_available': False
+            })
+        messages.success(request, message)
         return redirect('books_list')
     else:
         return render(request, 'borrow_modal.html', {'book': book})

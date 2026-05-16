@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Signup
 from books.models import Book, Borrow
@@ -87,6 +88,25 @@ def my_borrowed_books(request):
     return render(request, 'my_borrowed.html', {
         'borrowed_books': borrowed
     })
+
+
+def unborrow_book(request, borrow_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    if request.method != 'POST':
+        return redirect('welcome')
+    borrow = get_object_or_404(Borrow, id=borrow_id, user_id=user_id, is_returned=False)
+    book = borrow.book
+    book.available = True
+    book.save()
+    borrow.delete()
+    message = 'Book returned successfully.'
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True, 'message': message, 'book_available': True})
+    messages.success(request, message)
+    return redirect('my_borrowed_books')
+
 
 def manage_books(request):
     if not is_admin(request): return redirect('welcome')

@@ -9,6 +9,7 @@ class Book(models.Model):
     published_date = models.DateField()
     description = models.TextField()
     image = models.ImageField(upload_to='books/')
+    available = models.BooleanField(default=True)
     borrow_price_per_day = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     @property

@@ -38,7 +38,23 @@
                             <p>Published: <span>{{ book.published_date|date:'d-m-Y' }}</span></p>
                             <p>Borrow Price Per Day: <span>${{ book.borrow_price_per_day }}</span></p>
                         </div>
-                        <button class="btn borrow_btn" data-book-id="{{ book.id }}" data-price="{{ book.borrow_price_per_day }}">Borrow</button>
+                        {% if borrow_record %}
+                        <div class="borrow-details">
+                            <h3>Borrow Details</h3>
+                            <p><strong>Borrowed On:</strong> {{ borrow_record.borrowed_date|date:'d-m-Y' }}</p>
+                            <p><strong>End Date:</strong> {{ borrow_record.return_date|date:'d-m-Y' }}</p>
+                            <p><strong>Days:</strong> {{ borrow_record.days }}</p>
+                            <p><strong>Total Price:</strong> ${{ borrow_record.total_price }}</p>
+                        </div>
+                        <form method="post" action="{% url 'unborrow_book' borrow_record.id %}" class="unborrow-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn unborrow_btn">Unborrow</button>
+                        </form>
+                        {% else %}
+                        <button class="btn borrow_btn" data-book-id="{{ book.id }}" data-price="{{ book.borrow_price_per_day }}" {% if not book.available %}disabled style="opacity:0.5;cursor:not-allowed;"{% endif %}>
+                            {% if book.available %}Borrow{% else %}Borrowed{% endif %}
+                        </button>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="book-description-block">
@@ -49,47 +65,436 @@
         </main>
 
         <!-- Borrow Modal -->
-        <div id="borrowModal" class="modal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
-            <div class="modal-content" style="background-color: #111; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 400px; border-radius: 8px; color: white;">
-                <span class="close" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+        <div id="borrowModal" class="modal">
+            <div class="modal-content">
+                <button type="button" class="close-button">&times;</button>
                 <h2>Borrow Book</h2>
-                <p id="bookTitle"></p>
+                <p id="bookTitle" class="modal-book-title"></p>
                 <form id="borrowForm" method="post" action="">
                     {% csrf_token %}
                     <label for="days">Number of days:</label>
-                    <input type="number" id="days" name="days" min="1" required style="width: 100%; padding: 8px; margin: 10px 0; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px;">
-                    <p>Daily price: $<span id="dailyPrice"></span></p>
-                    <p>Total price: $<span id="totalPrice"></span></p>
-                    <button type="submit" style="background: #00d2ff; color: black; padding: 10px; border: none; border-radius: 4px; cursor: pointer;">Confirm Borrow</button>
+                    <input type="number" id="days" name="days" min="1" required />
+                    <div class="modal-price-row">
+                        <p>Daily price: <strong>$<span id="dailyPrice"></span></strong></p>
+                        <p>Total price: <strong>$<span id="totalPrice"></span></strong></p>
+                    </div>
+                    <button type="submit" class="modal-submit-btn">Confirm Borrow</button>
                 </form>
             </div>
         </div>
 
+        <style>
+            .page {
+                padding: 42px 24px 68px;
+                max-width: 1260px;
+                margin: 0 auto;
+            }
+            .container {
+                display: grid;
+                gap: 32px;
+                background: rgba(255,255,255,0.04);
+                border: 1px solid rgba(255,255,255,0.12);
+                border-radius: 28px;
+                padding: 32px;
+                box-shadow: 0 32px 90px rgba(0,0,0,0.20);
+            }
+            .con {
+                display: flex;
+                gap: 32px;
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+            .image {
+                flex: 1 1 320px;
+                min-width: 280px;
+            }
+            .image img {
+                width: 100%;
+                display: block;
+                border-radius: 28px;
+                object-fit: cover;
+                box-shadow: 0 28px 60px rgba(0,0,0,0.32);
+                border: 1px solid rgba(255,255,255,0.14);
+            }
+            .book_info {
+                flex: 1.35 1 440px;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+            .book_category {
+                color: #8ee7ff;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                margin: 0;
+                font-size: 0.85rem;
+            }
+            .book_name {
+                margin: 0;
+                font-size: clamp(2rem, 3.4vw, 3.4rem);
+                line-height: 1.02;
+            }
+            .book_author {
+                margin: 0;
+                color: #b4e5ff;
+                font-size: 1.05rem;
+            }
+            .book_meta {
+                display: grid;
+                gap: 10px;
+                padding: 22px;
+                border-radius: 20px;
+                background: rgba(255,255,255,0.06);
+                border: 1px solid rgba(255,255,255,0.12);
+            }
+            .book_meta p {
+                margin: 0;
+                color: #dcecff;
+                font-size: 0.97rem;
+            }
+            .book_meta span {
+                color: #ffffff;
+                font-weight: 600;
+            }
+            .borrow-details {
+                background: rgba(0, 210, 255, 0.10);
+                border: 1px solid rgba(0, 210, 255, 0.24);
+                padding: 22px;
+                border-radius: 20px;
+                color: #e9f9ff;
+            }
+            .borrow-details h3 {
+                margin: 0 0 14px;
+                color: #8ae8ff;
+                font-size: 1.1rem;
+            }
+            .borrow-details p {
+                margin: 8px 0;
+                font-size: 0.97rem;
+            }
+            .borrow-details strong {
+                color: #ffffff;
+            }
+            .borrow_btn,
+            .unborrow_btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 160px;
+                border-radius: 14px;
+                padding: 14px 22px;
+                font-weight: 700;
+                letter-spacing: 0.03em;
+                transition: transform 0.17s ease, box-shadow 0.17s ease, background 0.17s ease;
+                box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+            }
+            .borrow_btn {
+                background: #00d2ff;
+                color: #080808;
+                border: none;
+            }
+            .borrow_btn:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 22px 45px rgba(0,210,255,0.28);
+            }
+            .borrow_btn:disabled {
+                background: rgba(255,255,255,0.10);
+                color: #93a2b5;
+                box-shadow: none;
+                cursor: not-allowed;
+            }
+            .unborrow_btn {
+                background: #ff5555;
+                color: #fff;
+                border: none;
+            }
+            .unborrow_btn:hover {
+                transform: translateY(-2px);
+                background: #e64545;
+            }
+            .modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 1000;
+                background: rgba(0, 0, 0, 0.72);
+                padding: 30px 20px;
+                overflow-y: auto;
+            }
+            .modal-content {
+                position: relative;
+                width: min(100%, 420px);
+                margin: 0 auto;
+                padding: 30px 28px;
+                background: rgba(15, 18, 30, 0.96);
+                border-radius: 26px;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                box-shadow: 0 34px 90px rgba(0, 0, 0, 0.45);
+                color: #e8f7ff;
+            }
+            .modal-content h2 {
+                margin: 0 0 14px;
+                font-size: 1.85rem;
+                letter-spacing: -0.03em;
+            }
+            .close-button {
+                position: absolute;
+                top: 18px;
+                right: 18px;
+                width: 42px;
+                height: 42px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border: none;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.08);
+                color: #ffffff;
+                font-size: 1.4rem;
+                cursor: pointer;
+                transition: background 0.2s ease;
+            }
+            .close-button:hover {
+                background: rgba(255, 255, 255, 0.16);
+            }
+            .modal-book-title {
+                margin: 0 0 18px;
+                color: #c7f4ff;
+                font-size: 1rem;
+            }
+            .modal-content label {
+                display: block;
+                margin-bottom: 10px;
+                color: #9ccce0;
+                letter-spacing: 0.03em;
+                font-weight: 600;
+            }
+            .modal-content input {
+                width: 100%;
+                padding: 14px 16px;
+                margin-bottom: 18px;
+                border-radius: 14px;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                background: rgba(255, 255, 255, 0.05);
+                color: #eef8ff;
+            }
+            .modal-price-row p {
+                margin: 8px 0;
+                color: #dbefff;
+                font-size: 0.96rem;
+            }
+            .modal-price-row strong {
+                color: #ffffff;
+            }
+            .modal-submit-btn {
+                width: 100%;
+                border: none;
+                border-radius: 16px;
+                padding: 14px 0;
+                margin-top: 6px;
+                background: linear-gradient(135deg, #00d2ff, #00bcd4);
+                color: #08202a;
+                font-weight: 800;
+                letter-spacing: 0.04em;
+                cursor: pointer;
+                box-shadow: 0 18px 35px rgba(0, 210, 255, 0.22);
+                transition: transform 0.18s ease, box-shadow 0.18s ease;
+            }
+            .modal-submit-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 20px 50px rgba(0, 210, 255, 0.28);
+            }
+            .modal-submit-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+            .toast {
+                position: fixed;
+                top: 24px;
+                right: 24px;
+                padding: 14px 18px;
+                border-radius: 12px;
+                color: #ffffff;
+                background: rgba(0, 0, 0, 0.82);
+                box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+                z-index: 9999;
+                font-weight: 600;
+                animation: toastFade 0.35s ease-out;
+            }
+            .toast.success {
+                border: 1px solid rgba(45, 209, 128, 0.45);
+            }
+            .toast.error {
+                border: 1px solid rgba(255, 92, 92, 0.45);
+                background: rgba(33, 33, 33, 0.92);
+            }
+            @keyframes toastFade {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .book-description-block {
+                margin-top: 18px;
+                padding: 28px;
+                border-radius: 24px;
+                background: rgba(255,255,255,0.06);
+                border: 1px solid rgba(255,255,255,0.12);
+            }
+            .book-description-block h1 {
+                margin: 0 0 18px;
+                font-size: 1.7rem;
+            }
+            .book_description {
+                margin: 0;
+                color: #dfefff;
+                line-height: 1.85;
+                white-space: pre-line;
+                font-size: 1rem;
+            }
+            @media (max-width: 900px) {
+                .con {
+                    flex-direction: column;
+                }
+            }
+        </style>
         <script src="{% static 'javascript/star.js' %}"></script>
         <script>
-            // Modal functionality
             const modal = document.getElementById('borrowModal');
-            const closeBtn = document.querySelector('.close');
+            const closeBtn = document.querySelector('.close-button');
             const borrowBtn = document.querySelector('.borrow_btn');
             const daysInput = document.getElementById('days');
             const dailyPriceSpan = document.getElementById('dailyPrice');
             const totalPriceSpan = document.getElementById('totalPrice');
             const borrowForm = document.getElementById('borrowForm');
             const bookTitle = document.getElementById('bookTitle');
+            const unborrowForm = document.querySelector('.unborrow-form');
 
             let currentBookId = null;
             let currentPrice = 0;
 
-            borrowBtn.addEventListener('click', function() {
-                currentBookId = this.getAttribute('data-book-id');
-                currentPrice = parseFloat(this.getAttribute('data-price'));
-                const bookName = document.querySelector('.book_name').textContent.trim();
-                bookTitle.textContent = `Book: ${bookName}`;
-                dailyPriceSpan.textContent = currentPrice.toFixed(2);
-                totalPriceSpan.textContent = '0.00';
-                borrowForm.action = `/borrow/${currentBookId}/`;
-                modal.style.display = 'block';
-            });
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.remove();
+                }, 3200);
+            }
+
+            function setupBorrowButton(button) {
+                if (!button) return;
+                button.addEventListener('click', function() {
+                    currentBookId = this.getAttribute('data-book-id');
+                    currentPrice = parseFloat(this.getAttribute('data-price'));
+                    const bookName = document.querySelector('.book_name').textContent.trim();
+                    bookTitle.textContent = `Book: ${bookName}`;
+                    dailyPriceSpan.textContent = currentPrice.toFixed(2);
+                    totalPriceSpan.textContent = '0.00';
+                    borrowForm.action = `/borrow/${currentBookId}/`;
+                    modal.style.display = 'block';
+                });
+            }
+
+            function setupUnborrowForm(form) {
+                if (!form) return;
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = new FormData(this);
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast(data.message, 'success');
+                            const borrowDetails = document.querySelector('.borrow-details');
+                            if (borrowDetails) borrowDetails.remove();
+                            this.remove();
+                            const bookInfo = document.querySelector('.book_info');
+                            if (bookInfo) {
+                                const newButton = document.createElement('button');
+                                newButton.className = 'btn borrow_btn';
+                                newButton.setAttribute('data-book-id', '{{ book.id }}');
+                                newButton.setAttribute('data-price', '{{ book.borrow_price_per_day }}');
+                                newButton.textContent = 'Borrow';
+                                bookInfo.appendChild(newButton);
+                                setupBorrowButton(newButton);
+                            }
+                        } else {
+                            showToast(data.message || 'Failed to unborrow', 'error');
+                        }
+                    })
+                    .catch(() => {
+                        showToast('Unable to unborrow. Try again.', 'error');
+                    });
+                });
+            }
+
+            if (borrowBtn) {
+                setupBorrowButton(borrowBtn);
+            }
+
+            if (borrowForm) {
+                borrowForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = new FormData(this);
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast(data.message, 'success');
+                            modal.style.display = 'none';
+                            if (borrowBtn) {
+                                borrowBtn.textContent = 'Borrowed';
+                                borrowBtn.disabled = true;
+                                borrowBtn.style.opacity = '0.5';
+                                borrowBtn.style.cursor = 'not-allowed';
+                            }
+                            const bookInfo = document.querySelector('.book_info');
+                            if (bookInfo) {
+                                const existingDetails = bookInfo.querySelector('.borrow-details');
+                                if (existingDetails) existingDetails.remove();
+                                const details = document.createElement('div');
+                                details.className = 'borrow-details';
+                                details.innerHTML = `
+                                    <h3>Borrow Details</h3>
+                                    <p><strong>Borrowed On:</strong> ${data.borrow_details.borrowed_date}</p>
+                                    <p><strong>End Date:</strong> ${data.borrow_details.end_date}</p>
+                                    <p><strong>Days:</strong> ${data.borrow_details.days}</p>
+                                    <p><strong>Total Price:</strong> $${data.borrow_details.total_price}</p>
+                                `;
+                                bookInfo.appendChild(details);
+                                const newForm = document.createElement('form');
+                                newForm.method = 'post';
+                                newForm.action = `/unborrow/${data.borrow_id}/`;
+                                newForm.className = 'unborrow-form';
+                                newForm.innerHTML = `{% csrf_token %}<button type="submit" class="btn unborrow_btn">Unborrow</button>`;
+                                bookInfo.appendChild(newForm);
+                                setupUnborrowForm(newForm);
+                            }
+                        } else {
+                            showToast(data.message || 'Failed to borrow the book.', 'error');
+                        }
+                    })
+                    .catch(() => {
+                        showToast('Unable to borrow. Try again.', 'error');
+                    });
+                });
+            }
+
+            if (unborrowForm) {
+                setupUnborrowForm(unborrowForm);
+            }
 
             closeBtn.addEventListener('click', function() {
                 modal.style.display = 'none';
