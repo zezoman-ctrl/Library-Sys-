@@ -34,6 +34,7 @@
                         <th>Total Price</th>
                         <th>Return Date</th>
                         <th>Return Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,10 +57,20 @@
                                 <span class="badge badge-borrowed">Borrowed</span>
                             {% endif %}
                         </td>
+                        <td>
+                            {% if not item.is_returned %}
+                                <form method="post" action="{% url 'unborrow_book' item.id %}" style="margin:0;">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background:#e74c3c; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">Unborrow</button>
+                                </form>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" style="text-align:center;">You have not borrowed any books yet.</td>
+                        <td colspan="8" style="text-align:center;">You have not borrowed any books yet.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -67,7 +78,15 @@
         </div>
     </main>
 
-    <div id="toastBox"></div>
+    <div id="toastBox">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast {% if message.tags == 'error' %}error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
     <script src="{% static 'javascript/star.js' %}"></script>
 </body>
 </html>

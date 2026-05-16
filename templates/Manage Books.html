@@ -25,16 +25,20 @@
         <div class="books-grid">
             {% for book in books %}
             <div class="book-card">
+                <div class="book-image">
+                    {% if book.image %}
+                    <img src="{{ book.image.url }}" alt="{{ book.title }} cover" />
+                    {% else %}
+                    <img src="{% static 'assets/10016630_27277.jpg' %}" alt="Default book cover" />
+                    {% endif %}
+                </div>
                 <span class="category-tag">{{ book.category|default:"General" }}</span>
                 <span class="book-id">ID: {{ book.id }}</span>
-                <h3>{{ book.title }}</h3>
+                <h3><a class="book-title-link" href="{% url 'book_details' book.id %}">{{ book.title }}</a></h3>
                 <p class="book-author">by {{ book.author }}</p>
-                {% if book.description %}
-                <p class="book-desc">{{ book.description }}</p>
-                {% endif %}
                 <div class="card-actions">
                     <a class="btn-edit" href="{% url 'edit_book' book.id %}">Edit</a>
-                    <a class="btn-delete" href="{% url 'delete_book' book.id %}" onclick="return confirm('Delete \"{{ book.title }}\" from the library?')">Delete</a>
+                    <a class="btn-delete" href="{% url 'delete_book' book.id %}" onclick="return confirm('Delete {{ book.title|escapejs }} from the library?')">Delete</a>
                 </div>
             </div>
             {% empty %}

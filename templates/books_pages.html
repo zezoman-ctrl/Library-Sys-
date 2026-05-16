@@ -116,7 +116,7 @@
                         <th>Publisher/Author</th>
                         <th>Category</th>
                         <th>Borrow Price Per Day</th>
-                        <th>Borrow Button</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
 
@@ -141,7 +141,9 @@
         <td>${{ book.borrow_price_per_day }}</td>
 
         <td>
-            <button class="borrow-btn" data-book-id="{{ book.id }}" data-price="{{ book.borrow_price_per_day }}">Borrow</button>
+            <span class="status-badge {% if book.available %}status-available{% else %}status-borrowed{% endif %}">
+                {% if book.available %}Available{% else %}Borrowed{% endif %}
+            </span>
         </td>
 
     </tr>
@@ -195,6 +197,28 @@
         </div>
     </div>
 
+    <style>
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+        }
+        .status-available {
+            background: rgba(0, 214, 143, 0.12);
+            color: #00d68a;
+            border: 1px solid rgba(0, 214, 143, 0.25);
+        }
+        .status-borrowed {
+            background: rgba(255, 87, 34, 0.12);
+            color: #ff5722;
+            border: 1px solid rgba(255, 87, 34, 0.25);
+        }
+    </style>
     <script src="{% static 'javascript/search.js' %}?v=2"></script>
     <script src="{% static 'javascript/star.js' %}"></script>
     <script>

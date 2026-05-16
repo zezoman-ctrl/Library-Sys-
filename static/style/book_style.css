@@ -168,22 +168,87 @@ p {
 	color: #a5b4fc;
 }
 
+.book_meta_actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 18px;
+	margin-bottom: 24px;
+}
+
 .book_meta {
 	display: grid;
-	gap: 10px 20px;
+	grid-template-columns: repeat(2, minmax(160px, 1fr));
+	gap: 14px 22px;
+	flex: 1;
+}
+
+.borrow_btn {
+	align-self: center;
+	min-width: 160px;
+	padding: 12px 28px;
 }
 
 .book_meta p {
 	margin: 0;
-	font-size: 14px !important;
-	color: #d1d5db !important;
+	font-size: 15px ;
+	line-height: 1.65;
+	color: #d1d5db ;
 }
 
 .book_meta p span {
-	font-weight: bold;
-	color: #e5e7eb;
+	font-weight: 700;
+	color: #f8fafc;
 }
 
+.book_info {
+	flex: 2;
+	min-width: 280px;
+	padding: 10px 0;
+}
+
+.book_info p.book_category {
+	margin-bottom: 14px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: #9ca3af;
+	font-size: 13px;
+}
+
+.book_info h1 {
+	margin: 8px 0 12px;
+	font-size: 38px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+	color: #f9fafb;
+}
+
+.book_info h2 {
+	margin: 0 0 20px;
+	font-size: 18px;
+	font-weight: 400;
+	color: #a5b4fc;
+}
+
+.desc {
+	margin-top: 35px;
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+	padding-top: 26px;
+}
+
+.desc h1 {
+	font-size: 24px;
+	margin-bottom: 16px;
+	color: #f3f4f6;
+}
+
+.desc .book_description {
+	font-size: 15px;
+	line-height: 1.8;
+	color: #d1d5db;
+	max-width: 760px;
+}
 
 .rating {
 	display: flex;
