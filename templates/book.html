@@ -180,6 +180,7 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
+                align-self: flex-start;
                 min-width: 160px;
                 border-radius: 14px;
                 padding: 14px 22px;
@@ -360,7 +361,7 @@
         <script>
             const modal = document.getElementById('borrowModal');
             const closeBtn = document.querySelector('.close-button');
-            const borrowBtn = document.querySelector('.borrow_btn');
+            let borrowBtn = document.querySelector('.borrow_btn');
             const daysInput = document.getElementById('days');
             const dailyPriceSpan = document.getElementById('dailyPrice');
             const totalPriceSpan = document.getElementById('totalPrice');
@@ -383,6 +384,7 @@
 
             function setupBorrowButton(button) {
                 if (!button) return;
+                borrowBtn = button;
                 button.addEventListener('click', function() {
                     currentBookId = this.getAttribute('data-book-id');
                     currentPrice = parseFloat(this.getAttribute('data-price'));
@@ -416,6 +418,10 @@
                             this.remove();
                             const bookInfo = document.querySelector('.book_info');
                             if (bookInfo) {
+                                const existingButton = bookInfo.querySelector('.borrow_btn');
+                                if (existingButton) {
+                                    existingButton.remove();
+                                }
                                 const newButton = document.createElement('button');
                                 newButton.className = 'btn borrow_btn';
                                 newButton.setAttribute('data-book-id', '{{ book.id }}');
@@ -454,11 +460,9 @@
                         if (data.success) {
                             showToast(data.message, 'success');
                             modal.style.display = 'none';
-                            if (borrowBtn) {
-                                borrowBtn.textContent = 'Borrowed';
-                                borrowBtn.disabled = true;
-                                borrowBtn.style.opacity = '0.5';
-                                borrowBtn.style.cursor = 'not-allowed';
+                            const activeBorrowBtn = document.querySelector('.borrow_btn');
+                            if (activeBorrowBtn) {
+                                activeBorrowBtn.remove();
                             }
                             const bookInfo = document.querySelector('.book_info');
                             if (bookInfo) {
